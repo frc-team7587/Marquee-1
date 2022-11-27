@@ -32,7 +32,7 @@ The system contains the following components
    Serial communications task runs at high relative priority.
 4. Display task, which receives and responds to internal display messages and
    adjusts the display as directed. This task runs at relatively low priority.
-5..[FreeRTOS Queue](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/freertos.html#queue-api)
+5. [FreeRTOS Queue](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/freertos.html#queue-api)
    used for inter-task communications, to send display directives from the
    Serial communications task to the display task.
 
