@@ -59,3 +59,22 @@ to power the array on the robot. Because the ESP32 runs at 3.3 volts and the
 display runs at 5, We might also need logic 
 [level shifters](https://www.amazon.com/SongHe-Channels-Converter-Bi-Directional-Shifter/dp/B07YZTW2SM/ref=sr_1_4).
 My configuration is running without them, but that's just luck.
+
+##Connecting the LED Panel
+
+The [LED Panel}(https://www.amazon.com/BTF-LIGHTING-Individual-Addressable-Flexible-Controllers/dp/B088BTXHRG?th=1)
+needs +5 Volts VCC, ground, and a control signal. It has two input and one output connections. Note that the
+red wire always carries VCC and the black whire always connects to ground. When present, the green wire carries
+the control signal.
+
+* A pair of unterminated black and red wires in the middle of the panel. Connect the red wire to +5 volts
+and the black wire to ground.
+
+* Three wires: red, black, and green connected to a female connector
+
+* Three wires: red, black, and green connected to a male connector
+
+Connect the green wire to GPIO pin 15. Note that this is **logical** pin 15. Consult the pinout diagram
+to find its physical location.
+
+
