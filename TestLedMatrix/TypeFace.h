@@ -4,7 +4,7 @@
  *  Created on: July 24, 2022
  *      Author: Eric Mintz
  *
- * Represents a type face
+ * Represents a type face, a.k.a a font
  */
 
 #ifndef TYPEFACE_H_

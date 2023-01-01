@@ -5,7 +5,7 @@
  *      Author: Eric Mintz
  *  Represents an LED array in the conventional coordinate system
  *
- * At the lowest (i.e. physical) leve, displays are a linear array of pixels.
+ * At the lowest (i.e. physical) level, displays are a linear array of pixels.
  * Implementations translate (row, column) pairs into array positions. In other
  * words, Panel implementations define a panel's underlying geometry.
  *

@@ -19,7 +19,7 @@
  *  2.  The controlling task repeatedly invokes refresh() to update the
  *      display.
  *
- * Please see the method documentation for details. Se also:
+ * Please see the method documentation for details. See also:
  *
  *   * DisplayMessage.h, the message providing display parameters.
  *
