@@ -5,8 +5,6 @@
  *      Author: Eric Mintz
  *
  *  Pins and channel configuration for the PWM and LED string signals
- *  Note that the assignment includes pins for an accelerometer that
- *  is not part of this prototype.
  */
 
 #ifndef PWMPINSANDCHANNELS_H_

@@ -1,8 +1,14 @@
 Config.Release.board.BOARD.ID=node32s
+Config.Release.board.BOARD.MENU.CPUFreq=getMenuItemIDFromMenuItemName did not find menu item with name "240MHz (WiFi/BT)" for menu ID "CPUFreq" and for boardID "hornbill32minima"!
 Config.Release.board.BOARD.MENU.DebugLevel=none
 Config.Release.board.BOARD.MENU.EraseFlash=none
+Config.Release.board.BOARD.MENU.EventsCore=getMenuItemIDFromMenuItemName did not find menu item with name "Core 1" for menu ID "EventsCore" and for boardID "hornbill32minima"!
 Config.Release.board.BOARD.MENU.FlashFreq=80
-Config.Release.board.BOARD.MENU.PartitionScheme=default
+Config.Release.board.BOARD.MENU.FlashMode=getMenuItemIDFromMenuItemName did not find menu item with name "QIO" for menu ID "FlashMode" and for boardID "hornbill32minima"!
+Config.Release.board.BOARD.MENU.FlashSize=getMenuItemIDFromMenuItemName did not find menu item with name "4MB (32Mb)" for menu ID "FlashSize" and for boardID "hornbill32minima"!
+Config.Release.board.BOARD.MENU.LoopCore=getMenuItemIDFromMenuItemName did not find menu item with name "Core 1" for menu ID "LoopCore" and for boardID "hornbill32minima"!
+Config.Release.board.BOARD.MENU.PSRAM=getMenuItemIDFromMenuItemName did not find menu item with name "Disabled" for menu ID "PSRAM" and for boardID "hornbill32minima"!
+Config.Release.board.BOARD.MENU.PartitionScheme=getMenuItemIDFromMenuItemName did not find menu item with name "" for menu ID "PartitionScheme" and for boardID "node32s"!
 Config.Release.board.BOARD.MENU.UploadSpeed=921600
 Config.Release.board.BOARD.TXT=${SLOEBER_HOME}/arduinoPlugin/packages/esp32/hardware/esp32/2.0.5/boards.txt
 Config.Release.board.PROGRAMMER.NAME=

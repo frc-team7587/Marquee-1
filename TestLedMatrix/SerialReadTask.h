@@ -13,7 +13,7 @@
  *
  * Note that:
  *
- *   The message is limited to 256 characters, all in.
+ *   The message is limited to 124 characters, all in.
  *   All numbers are decimal
  *   Delays are in milliseconds between 0 and 32767 inclusive
  *   The display text can be empty and must not contain '|'.  Only characters
@@ -23,38 +23,38 @@
  *   The '\r' character is ignored and optional
  *   The design is optimized for 115200 baud or 11520 characters per second or
  *   11.52 characters per millisecond. It is recommended that the serial buffer
- *   be increased to 256 bytes to guarantee successful operation.
+ *   be increased to 128 or more bytes to guarantee successful operation.
  */
 
 #ifndef SERIALREADTASK_H_
 #define SERIALREADTASK_H_
 
-#include <Arduino.h>
+#include "Arduino.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
 
+#include "CommandPublisher.h"
+
+#define INPUT_BUFFER_SIZE 128
+
 class SerialReadTask {
+	enum SerialReadStatus {
+		READING,
+		OVERRUN,
+	};
+
+	CommandPublisher *command_publisher;
+	unsigned char input_buffer[INPUT_BUFFER_SIZE];
 public:
-	SerialReadTask();
+	SerialReadTask(CommandPublisher *command_publisher);
 	virtual ~SerialReadTask();
 
 	/**
 	 * Infinite loop that reads from the serial USB connection, decodes the
-	 * messages, and sends sends DisplayMessage instances over the specified
-	 * FreeRTOS Queue.
-	 *
-	 * Parameters:
-	 * ----------
-	 *
-	 *   Name              Contents
-	 *   ----------------- ---------------------------------------------------
-	 *   h_command_queue   Handle of the FreeRTOS Queue that transmits
-	 *                     DisplayMessage instances from this task to the
-	 *                     display management task.
-	 *
-	 *
+	 * messages, forwards them to the command publisher that was bound during
+	 * construction.
 	 */
-	void run(QueueHandle_t h_command_queue);
+	void run();
 
 	/**
 	 * States for the DFA that decodes incoming command strings. See
@@ -102,8 +102,6 @@ private:
 	BaseType_t background_red;
 	BaseType_t background_green;
 	BaseType_t background_blue;
-
-	void reset();
 };
 
 

@@ -34,17 +34,22 @@
 		<link>
 			<name>core/core</name>
 			<type>2</type>
-			<location>/home/eric/git/arduino-esp32/cores/esp32</location>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/2.0.5/cores/esp32</locationURI>
 		</link>
 		<link>
 			<name>core/variant</name>
 			<type>2</type>
-			<location>/home/eric/git/arduino-esp32/variants/node32s</location>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/2.0.5/variants/node32s</locationURI>
 		</link>
 		<link>
 			<name>libraries/FastLED</name>
 			<type>2</type>
 			<location>/home/eric/Arduino/libraries/FastLED</location>
+		</link>
+		<link>
+			<name>libraries/FreeRTOS</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/FreeRTOS/10.5.0-0</locationURI>
 		</link>
 		<link>
 			<name>libraries/Queue</name>

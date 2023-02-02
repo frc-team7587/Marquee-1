@@ -23,10 +23,16 @@
 #include "Marquee.h"
 #include "Panels.h"
 #include "SerialReadTask.h"
+#include "SPIReceiveTask.h"
 
 #include "PwmPinsAndChannels.h"
 
 #define NUM_LEDS (8 * 32)
+
+#define MAX_SPI_MESSAGE 128
+
+WORD_ALIGNED_ATTR DMA_ATTR uint8_t spi_receive_buffer[MAX_SPI_MESSAGE];
+WORD_ALIGNED_ATTR DMA_ATTR uint8_t spi_send_buffer[MAX_SPI_MESSAGE];
 
 static CRGB leds[NUM_LEDS];
 static 	const Panel* panel = Panels::alternatingEightByThirtyTwo();
@@ -34,7 +40,13 @@ static 	const Panel* panel = Panels::alternatingEightByThirtyTwo();
 static Marquee marquee(leds, NUM_LEDS, *panel);
 static DisplayDrivers drivers;
 static DisplayManager display_manager(&drivers, &marquee);
-static SerialReadTask read_task;
+static CommandPublisher command_publisher;
+static SerialReadTask read_task(&command_publisher);
+static SPIReceiveTask spi_receive_task(
+		&command_publisher,
+		MAX_SPI_MESSAGE,
+		spi_receive_buffer,
+		spi_send_buffer);
 
 
 static QueueHandle_t h_command_queue;
@@ -47,7 +59,7 @@ static void start_display_manager(void *pv_params) {
 }
 
 static void start_serial_task(void *pv_params) {
-	read_task.run(h_command_queue);
+	read_task.run();
 }
 
 //The setup function is called once at startup of the sketch
@@ -58,7 +70,10 @@ void setup() {
 	  FastLED.addLeds<WS2812, LED_ARRAY_PIN, GRB>(leds, NUM_LEDS);
 	  Serial.println("LED array initialized.");
 
+	  SPIReceiveTask::configure_gpio();
+
 	  h_command_queue = xQueueCreate(4, sizeof(DisplayMessage));
+	  command_publisher.begin(h_command_queue);
 
 	xTaskCreate(
 		start_display_manager,
@@ -76,6 +91,7 @@ void setup() {
 		3,
 		&h_serial_communication_manager);
 
+	spi_receive_task.start();
 
 	DisplayMessage left_to_right_message;
 	left_to_right_message.p_text = NULL;

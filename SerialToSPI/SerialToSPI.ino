@@ -32,8 +32,6 @@
  * +-----+--------------------------------------------------------------------+
  * |   4 | /Slave Honoring Contracts                                          |
  * +-----+--------------------------------------------------------------------+
- * |   2 | Liveness Blink                                                     |
- * +-----+--------------------------------------------------------------------+\
  *
  * Note that a the standard SPI full duplex transmission **exchanges** data
  * between the master and slave. The master sends via MOSI while simultaneously
@@ -52,7 +50,6 @@
  * https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/peripherals/spi_master.html
  */
 
-#define SLAVE_HONORING_CONTRACTS_NOT 4
 #define LIVENESS_BLINK 2
 
 #define INPUT_OUTPUT_BUFFER_SIZE 128
@@ -127,9 +124,6 @@ size_t read_a_line() {
 	size_t number_read = 0;
 	memset(to_slave_buffer, 0, sizeof(to_slave_buffer));
 	memset(from_slave_buffer, 0, sizeof(from_slave_buffer));
-//	number_read = Serial.readBytesUntil(
-//			'\n', to_slave_buffer, sizeof(to_slave_buffer) - 1);
-//	to_slave_buffer[number_read++] = '\n';
 	char input_character = 0;
 	while (input_character != '\n') {
 		int maybe_input = Serial.read();
@@ -165,10 +159,6 @@ void setup() {
 	pinMode(LIVENESS_BLINK, OUTPUT);
 	digitalWrite(LIVENESS_BLINK, LOW);
 
-	// The slave set this voltage low when it is ready to honor its
-	// SPI contract.
-	pinMode(SLAVE_HONORING_CONTRACTS_NOT, INPUT_PULLUP);
-
 	// Initialize the pins used by the VSPI controller. Note that this
 	// might be redundant.
 	pinMode(SS, OUTPUT);
@@ -198,11 +188,6 @@ void setup() {
 			NULL,
 			1);
 
-
-	Serial.println("Waiting for receiver to honor contracts.");
-	while (digitalRead(SLAVE_HONORING_CONTRACTS_NOT) == HIGH) {
-		vTaskDelay(pdMS_TO_TICKS(100));
-	}
 	Serial.println("Forwarding serial input to SPI.");
 }
 
@@ -212,13 +197,11 @@ void setup() {
 void loop() {
 	size_t bytes_read = read_a_line();
 	if (0 < bytes_read) {
-//		Serial.println("Sending ....");
 		vspi.beginTransaction(SPISettings());
 		digitalWrite(SS, LOW);
 		vTaskDelay(pdMS_TO_TICKS(1));
 		vspi.transferBytes(to_slave_buffer, from_slave_buffer, bytes_read);
 		digitalWrite(SS, HIGH);
 		vspi.endTransaction();
-//		Serial.println(".... sent!");
 	}
 }

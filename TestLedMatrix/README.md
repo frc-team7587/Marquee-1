@@ -29,10 +29,16 @@ The system contains the following components
    one on the USB connection.) The decodes and validates received commands,
    transforms the command into a semaitcally equivalent internal message,
    and sends the message to the Display task (see below). Note that the
-   Serial communications task runs at high relative priority.
-4. Display task, which receives and responds to internal display messages and
+   Serial communications task runs at high relative priority. Note
+   that serial communication is used during development. The RoboRio
+   will communicate via the SPI bus.
+4. SPI communications task, which communicates with the RoboRio via the classic,
+   full duplex SPI protocol, which means that the Marquee and RoboRio exchange
+   data, byte for byte. The Marquee sends text formatted commands to the
+   Marquee, while the Marquee sends zeros to the RoboRio. 
+5. Display task, which receives and responds to internal display messages and
    adjusts the display as directed. This task runs at relatively low priority.
-5. [FreeRTOS Queue](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/freertos.html#queue-api)
+6. [FreeRTOS Queue](https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/freertos.html#queue-api)
    used for inter-task communications, to send display directives from the
    Serial communications task to the display task.
 
@@ -60,7 +66,7 @@ display runs at 5, We might also need logic
 [level shifters](https://www.amazon.com/SongHe-Channels-Converter-Bi-Directional-Shifter/dp/B07YZTW2SM/ref=sr_1_4).
 My configuration is running without them, but that's just luck.
 
-##Connecting the LED Panel
+## Connecting the LED Panel
 
 The [LED Panel}(https://www.amazon.com/BTF-LIGHTING-Individual-Addressable-Flexible-Controllers/dp/B088BTXHRG?th=1)
 needs +5 Volts VCC, ground, and a control signal. It has two input and one output connections. Note that the
@@ -70,11 +76,63 @@ the control signal.
 * A pair of unterminated black and red wires in the middle of the panel. Connect the red wire to +5 volts
 and the black wire to ground.
 
-* Three wires: red, black, and green connected to a female connector
+* Three wires: red, white, and green connected to a female connector
 
-* Three wires: red, black, and green connected to a male connector
+* Three wires: red, white, and green connected to a male connector
 
-Connect the green wire to GPIO pin 15. Note that this is **logical** pin 15. Consult the pinout diagram
-to find its physical location.
+Connect the green wire to GPIO pin 15 and the white wire to ground. Note that GPIO pin number differs from the pin's position
+on the board. In our perferred breakout board (see link above), GPIO Pin 15 is connected to pin position 23. Please consult
+the board's pinut diagram for details.
+
+The Marquee uses the following signals. We have assigned a wire color to each signal.
+For the pit crew's sake, please adhere to the resulting conventions.
+
+| GPIO Pin | Color | I/O | Description |
+| -------- | ----- | --- | ----------- |
+| GND      | Green | N/A | Ground. The development board has three ground pins. They are equivalent. Connect to the RoboRio's GPIO ground and the panel's signal ground. |
+| MOSI     | Blue  | Input | Master Out, Slave In: carries data from the RoboRio to the Marquee |
+| MISO     | Yellow | Output | Master In, Slave Out: carries data from the Marquee to the RoboRio. |
+| CS       | White | Input | Chip Select: normally set to +3.3 Volts. The RoboRio lowers this pin to start a data exchange. |
+| SCK      | Black | Input | Clock: controls the data exchange. Each device sends one bit/clock tick. |
+| GPIO15   | Brown | Output | Marquee Signal: sets the pixel values in the display panel. |
+
+## Use
+
+The Marquee takes commands in pipe ('|')-delimited format, and must end with a new-line ('\n'). Commands 
+are limited to 124 characters including the terminating new line, and must be
+sent in a zero-filled, 128 byte buffer. The ESP32's SPI has a long-standing problem, it sometimes drops
+the last four characters in an SPI transmission, so we simply don't use them.
+
+The message contains the following fields:
+
+1. **Text**: the text to display on the marquee
+2. **Command**: what to do. See `DisplayCommand.h` for declarations.
+   Note that the enumerations have integer values starting from 0.
+3. **Delay-1**: the first delay value in milliseconds.
+4. **Delay-2**: The second delay in milliseconds.
+5. **Foreground Red**: the red intensity for the forground color
+6. **Foreground Green**: the green intensity for the forground color
+7. **Foreground Blue**: the blue intensity for the foreground color
+8. **Background Red**: the red intensity for the background color
+9. **Background Green**: the green intensity for the background color
+10. **Background Blue**: the blue intensity for the background color
+11. **Carriage Return**: an optional terminating carriage return ('\r'), ignored if provided
+12. **New Line**: the terminating new line ('\n') character, required
+
+Note that:
+
+*   The message is limited to 124 characters, all in.
+*   All numbers are decimal
+*   Delays are in milliseconds between 0 and 32767 inclusive
+*   The display text can be empty and must not contain '|'.  Only characters
+*   between ' ' and '~' (inclusive) EXCEPT '|' are supported.
+*   The command number is the index of the corresponding command enumeration *
+*   Colors are between 0 and 255 inclusive.
+*   The terminating carriage return ('\r') optional and ignored if provided
+*   The design is optimized for 115200 baud or 11520 characters per second or
+    11.52 characters per millisecond. It is recommended that the serial buffer
+    be set to 128 bytes or more to guarantee successful operation.
+
+
 
 
