@@ -90,6 +90,7 @@ For the pit crew's sake, please adhere to the resulting conventions.
 | GPIO Pin | Color | I/O | Description |
 | -------- | ----- | --- | ----------- |
 | GND      | Green | N/A | Ground. The development board has three ground pins. They are equivalent. Connect to the RoboRio's GPIO ground and the panel's signal ground. |
+| 3.3v     | Orange | 3.3 Volt power. Do **NOT** connect to any other voltage! |
 | MOSI     | Blue  | Input | Master Out, Slave In: carries data from the RoboRio to the Marquee |
 | MISO     | Yellow | Output | Master In, Slave Out: carries data from the Marquee to the RoboRio. |
 | CS       | White | Input | Chip Select: normally set to +3.3 Volts. The RoboRio lowers this pin to start a data exchange. |
