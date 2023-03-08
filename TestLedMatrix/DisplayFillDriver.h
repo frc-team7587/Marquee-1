@@ -4,7 +4,7 @@
  *  Created on: July 24, 2022
  *      Author: Eric Mintz
  *
- * DisplayDriver implementation that fills the entire panel with a single
+ * DisplayDriver implementation that fills the entire panel with a singoel
  * color.
  */
 
