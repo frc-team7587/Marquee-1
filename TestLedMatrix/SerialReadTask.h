@@ -38,70 +38,70 @@
 #define INPUT_BUFFER_SIZE 128
 
 class SerialReadTask {
-	enum SerialReadStatus {
-		READING,
-		OVERRUN,
-	};
+  enum SerialReadStatus {
+    READING,
+    OVERRUN,
+  };
 
-	CommandPublisher *command_publisher;
-	unsigned char input_buffer[INPUT_BUFFER_SIZE];
+  CommandPublisher *command_publisher;
+  unsigned char input_buffer[INPUT_BUFFER_SIZE];
 public:
-	SerialReadTask(CommandPublisher *command_publisher);
-	virtual ~SerialReadTask();
+  SerialReadTask(CommandPublisher *command_publisher);
+  virtual ~SerialReadTask();
 
-	/**
-	 * Infinite loop that reads from the serial USB connection, decodes the
-	 * messages, forwards them to the command publisher that was bound during
-	 * construction.
-	 */
-	void run();
+  /**
+   * Infinite loop that reads from the serial USB connection, decodes the
+   * messages, forwards them to the command publisher that was bound during
+   * construction.
+   */
+  void run();
 
-	/**
-	 * States for the DFA that decodes incoming command strings. See
-	 * https://en.wikipedia.org/wiki/Deterministic_finite_automaton
-	 * for an explanation of DFA.
-	 */
-	enum STATE {
-		TEXT,
-		TEXT_END,
-		COMMAND,
-		COMMAND_END,
-		DELAY_1,
-		DELAY_1_END,
-		DELAY_2,
-		DELAY_2_END,
-		FOREGROUND_RED,
-		FOREGROUND_RED_END,
-		FOREGROUND_GREEN,
-		FOREGROUND_GREEN_END,
-		FOREGROUND_BLUE,
-		FOREGROUND_BLUE_END,
-		BACKGROUND_RED,
-		BACKGROUND_RED_END,
-		BACKGROUND_GREEN,
-		BACKGROUND_GREEN_END,
-		BACKGROUND_BLUE,
-		IGNORING_RETURN,
-		END_OF_COMMAND,
-		ERROR,
-		END_OF_ERROR,
-		NUMBER_OF_STATES,  // MUST be last
-	};
+  /**
+   * States for the DFA that decodes incoming command strings. See
+   * https://en.wikipedia.org/wiki/Deterministic_finite_automaton
+   * for an explanation of DFA.
+   */
+  enum STATE {
+    TEXT,
+    TEXT_END,
+    COMMAND,
+    COMMAND_END,
+    DELAY_1,
+    DELAY_1_END,
+    DELAY_2,
+    DELAY_2_END,
+    FOREGROUND_RED,
+    FOREGROUND_RED_END,
+    FOREGROUND_GREEN,
+    FOREGROUND_GREEN_END,
+    FOREGROUND_BLUE,
+    FOREGROUND_BLUE_END,
+    BACKGROUND_RED,
+    BACKGROUND_RED_END,
+    BACKGROUND_GREEN,
+    BACKGROUND_GREEN_END,
+    BACKGROUND_BLUE,
+    IGNORING_RETURN,
+    END_OF_COMMAND,
+    ERROR,
+    END_OF_ERROR,
+    NUMBER_OF_STATES,  // MUST be last
+  };
 
 private:
-	unsigned char command_buffer[256];
+  unsigned char command_buffer[256];
 
-	STATE state;
-	int16_t number_of_characters;
-	int16_t command_index;
-	BaseType_t delay_1;
-	BaseType_t delay_2;
-	BaseType_t foreground_red;
-	BaseType_t foreground_green;
-	BaseType_t foreground_blue;
-	BaseType_t background_red;
-	BaseType_t background_green;
-	BaseType_t background_blue;
+  STATE state;
+  int16_t number_of_characters;
+  int16_t command_index;
+  BaseType_t delay_1;
+  BaseType_t delay_2;
+  BaseType_t foreground_red;
+  BaseType_t foreground_green;
+  BaseType_t foreground_blue;
+  BaseType_t background_red;
+  BaseType_t background_green;
+  BaseType_t background_blue;
 };
 
 
