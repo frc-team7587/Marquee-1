@@ -20,21 +20,21 @@
 
 class DisplayManager {
 
-	DisplayDrivers *drivers;
-	DisplayMessage message;
-	Marquee *marquee;
+  DisplayDrivers *drivers;
+  DisplayMessage message;
+  Marquee *marquee;
 
 public:
 
-	/**
-	 * Constructor -- creates DisplayManager instances
-	 *
-	 * Parameter              Contents
-	 * ---------------------- -----------------------------------------------
-	 * drivers                Display driver factory that provides low-level
-	 *                        marquee drive3rs to the display manager
-	 * marquee                The marquee that displays the text
-	 */
+  /**
+   * Constructor -- creates DisplayManager instances
+   *
+   * Parameter              Contents
+   * ---------------------- -----------------------------------------------
+   * drivers                Display driver factory that provides low-level
+   *                        marquee drive3rs to the display manager
+   * marquee                The marquee that displays the text
+   */
   DisplayManager(DisplayDrivers *drivers, Marquee *marquee) :
     drivers(drivers),
     marquee(marquee) {
