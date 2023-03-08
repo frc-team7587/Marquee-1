@@ -16,9 +16,6 @@
 #include "DisplayCommand.h"
 #include "DisplayMessage.h"
 
-static const unsigned char * INVALID_COMMAND =
-		(const unsigned char *) "BOGUS";
-
 SerialReadTask::SerialReadTask(CommandPublisher *command_publisher) :
 	command_publisher(command_publisher) {
 	memset(input_buffer, 0, sizeof(input_buffer));
