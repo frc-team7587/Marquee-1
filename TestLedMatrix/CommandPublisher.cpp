@@ -429,6 +429,7 @@ void CommandPublisher::parse_and_publish(const unsigned char * raw_command) {
 	command_to_publish.background.green = background_green;
 	command_to_publish.background.blue = background_blue;
 	xQueueSendToBack(h_command_queue, &command_to_publish, pdMS_TO_TICKS(25));
+	Serial.println("Command sent");
 }
 
 void CommandPublisher::publish_error() {

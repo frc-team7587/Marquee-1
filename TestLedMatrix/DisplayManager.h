@@ -26,12 +26,34 @@ class DisplayManager {
 
 public:
 
-	DisplayManager(DisplayDrivers *drivers, Marquee *marquee) {
-		this->drivers = drivers;
-		this->marquee = marquee;
-	}
+	/**
+	 * Constructor -- creates DisplayManager instances
+	 *
+	 * Parameter              Contents
+	 * ---------------------- -----------------------------------------------
+	 * drivers                Display driver factory that provides low-level
+	 *                        marquee drive3rs to the display manager
+	 * marquee                The marquee that displays the text
+	 */
+  DisplayManager(DisplayDrivers *drivers, Marquee *marquee) :
+    drivers(drivers),
+    marquee(marquee) {
+  }
 
-	void begin(QueueHandle_t queue_handle);
+  /**
+   * Starts the display manager
+   *
+   * Parameter               Contents
+   * ----------------------  -----------------------------------------------
+   * queue_handle            Handle to the queue that provides display
+   *                         commands
+   * command_indicator_queue The display driver sends indicator commands via
+   *                         this queue. The receiver blinks the built-in LED
+   *                         as directed by the command.
+   */
+  void begin(
+      QueueHandle_t queue_handle,
+      QueueHandle_t command_indicator_queue);
 };
 
 #endif /* DISPLAYMANAGER_H_ */
