@@ -20,31 +20,31 @@
 class NaturalOrderSinglePixelDriver : public DisplayDriver {
 private:
 
-	int8_t color_index;
-	size_t pixel_index;
-	CRGB current_color;
+  int8_t color_index;
+  size_t pixel_index;
+  CRGB current_color;
 
 	BaseType_t set_led(Marquee *marquee, QueueHandle_t h_queue);
 
 public:
-	NaturalOrderSinglePixelDriver() :
-		color_index(0),
-		pixel_index(0),
-		current_color(CRGB::Red) {
-	}
+  NaturalOrderSinglePixelDriver() :
+    color_index(0),
+    pixel_index(0),
+    current_color(CRGB::Red) {
+  }
 
 	virtual ~NaturalOrderSinglePixelDriver();
 
 
-	virtual BaseType_t begin(
-		const DisplayMessage& displayMessage,
-		Marquee *marquee,
-		QueueHandle_t h_queue);
+  virtual BaseType_t begin(
+    const DisplayMessage& displayMessage,
+    Marquee *marquee,
+    QueueHandle_t h_queue);
 
-	virtual BaseType_t refresh(
-		const DisplayMessage& displayMessage,
-		Marquee *marquee,
-		QueueHandle_t h_queue);
+  virtual BaseType_t refresh(
+    const DisplayMessage& displayMessage,
+    Marquee *marquee,
+    QueueHandle_t h_queue);
 };
 
 #endif /* NATURALORDERSINGLEPIXELDRIVER_H_ */

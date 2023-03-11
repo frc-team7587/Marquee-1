@@ -25,101 +25,101 @@ class Marquee {
 
 public:
 
-	/**
-	 * Constructs a Marquee. Note that the Marquee integrates an LED array
-	 * with physical panels.
-	 *
-	 * Parameters:
-	 * ----------
-	 *
-	 *   Name              Contents
-	 *   ----------------- ---------------------------------------------------
-	 *   leds              An array of CRGB LED objects.
-	 *   num_leds          The length of the leds array
-	 *   panel             The Panel implementation that specifies the
-	 *                     physical display geometry.
-	 *
-	 */
-	Marquee(CRGB *leds, size_t num_leds, const Panel& panel) :
-		leds(leds),
-		num_leds(num_leds),
-		panel(panel) {
-	}
+  /**
+   * Constructs a Marquee. Note that the Marquee integrates an LED array
+   * with physical panels.
+   *
+   * Parameters:
+   * ----------
+   *
+   *   Name              Contents
+   *   ----------------- ---------------------------------------------------
+   *   leds              An array of CRGB LED objects.
+   *   num_leds          The length of the leds array
+   *   panel             The Panel implementation that specifies the
+   *                     physical display geometry.
+   *
+   */
+  Marquee(CRGB *leds, size_t num_leds, const Panel& panel) :
+    leds(leds),
+    num_leds(num_leds),
+    panel(panel) {
+  }
 
-	/**
-	 * Sets a single array to a specified color.
-	 *
-	 * Parameters:
-	 * ----------
-	 *
-	 *   Name               ontents
-	 *   ----------------- ---------------------------------------------------
-	 *   row               The target pixel's row
-	 *   column            The target pixel's column
-	 *   color             The color to be set
-	 *
-	 */
-	void set_pixel(int row, int column, const CRGB *color);
+  /**
+   * Sets a single array to a specified color.
+   *
+   * Parameters:
+   * ----------
+   *
+   *   Name               ontents
+   *   ----------------- ---------------------------------------------------
+   *   row               The target pixel's row
+   *   column            The target pixel's column
+   *   color             The color to be set
+   *
+   */
+  void set_pixel(int row, int column, const CRGB *color);
 
-	/**
-	 * Returns the number of LEDs in a panel
-	 */
-	size_t columns() {
-		return panel.columns();
-	}
+  /**
+   * Returns the number of LEDs in a panel
+   */
+  size_t columns() {
+    return panel.columns();
+  }
 
-	/**
-	 * Returns the number of LEDs in the display, in all daisy chained panels
-	 */
-	size_t led_count() {
-		return panel.led_count();
-	}
+  /**
+   * Returns the number of LEDs in the display, in all daisy chained panels
+   */
+  size_t led_count() {
+    return panel.led_count();
+  }
 
-	/**
-	 * Returns the number of rows in the display
-	 */
-	size_t rows() {
-		return panel.rows();
-	}
+  /**
+   * Returns the number of rows in the display
+   */
+  size_t rows() {
+    return panel.rows();
+  }
 
-	/**
-	 * Sets a single pixel to a specified color
-	 *
-	 * Parameters:
-	 * ----------
-	 *
-	 *   Name              Contents
-	 *   ----------------- ---------------------------------------------------
-	 *   pixel_no          The pixel offset in the LED array
-	 *   color             The color to set
-	 *
-	 */
-	void set_pixel(int pixel_no, const CRGB *color);
+  /**
+   * Sets a single pixel to a specified color
+   *
+   * Parameters:
+   * ----------
+   *
+   *   Name              Contents
+   *   ----------------- ---------------------------------------------------
+   *   pixel_no          The pixel offset in the LED array
+   *   color             The color to set
+   *
+   */
+  void set_pixel(int pixel_no, const CRGB *color);
 
-	/**
-	 * Sets all pixels in the display to a specified color.
-	 *
-	 * Parameters:
-	 * ----------
-	 *
-	 *   Name              Contents
-	 *   ----------------- ---------------------------------------------------
-	 *   color             The color to set, the flood color.
-	 *
-	 */
-	void flood(const CRGB *color);
+  /**
+   * Sets all pixels in the display to a specified color.
+   *
+   * Parameters:
+   * ----------
+   *
+   *   Name              Contents
+   *   ----------------- ---------------------------------------------------
+   *   color             The color to set, the flood color.
+   *
+   */
+  void flood(const CRGB *color);
 
-	/**
-	 * Sends the LED array to the panel, showing the configured pattern.
-	 */
-	void show();
+  /**
+   * Sends the LED array to the panel, showing the configured pattern.
+   */
+  void show();
 
-	virtual ~Marquee();
+  virtual ~Marquee();
 
 private:
-	CRGB *leds;
-	const size_t num_leds;
-	const Panel& panel;
+  CRGB *leds;
+  const size_t num_leds;
+  const Panel& panel;
 };
 
 #endif /* MARQUEE_H_ */
