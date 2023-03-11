@@ -17,8 +17,8 @@
 class CanonicalColors {
 public:
 
-	static const CRGB *color_at(size_t index);
-	static size_t number_of_colors();
+  static const CRGB *color_at(size_t index);
+  static size_t number_of_colors();
 };
 
 #endif /* CANONICALCOLORS_H_ */

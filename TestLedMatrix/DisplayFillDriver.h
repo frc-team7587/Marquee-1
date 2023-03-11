@@ -17,18 +17,18 @@
 
 class DisplayFillDriver : public DisplayDriver {
 public:
-	DisplayFillDriver();
-	virtual ~DisplayFillDriver();
+  DisplayFillDriver();
+  virtual ~DisplayFillDriver();
 
-	virtual BaseType_t begin(
-		const DisplayMessage& displayMessage,
-		Marquee *marquee,
-		QueueHandle_t h_queue);
+  virtual BaseType_t begin(
+    const DisplayMessage& displayMessage,
+    Marquee *marquee,
+    QueueHandle_t h_queue);
 
-	virtual BaseType_t refresh(
-		const DisplayMessage& displayMessage,
-		Marquee *marquee,
-		QueueHandle_t h_queue);
+  virtual BaseType_t refresh(
+    const DisplayMessage& displayMessage,
+    Marquee *marquee,
+    QueueHandle_t h_queue);
 };
 
 #endif /* DISPLAYFILLDRIVER_H_ */

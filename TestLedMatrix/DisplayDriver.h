@@ -41,56 +41,56 @@ protected:
 	static DisplayMessage display_message;  // Throw-away display message
 
 public:
-	DisplayDriver();
-	virtual ~DisplayDriver();
+  DisplayDriver();
+  virtual ~DisplayDriver();
 
-	/**
-	 * Starts the display, then waits on the specified queue with an
-	 * implementation-dependent timeout.
-	 *
-	 * Parameters:
-	 * ----------
-	 *
-	 *   Name              Contents
-	 *   ----------------- ---------------------------------------------------
-	 *   display_message   Configures the display, e.g. foreground and
-	 *                     background colors. See DisplayhMessage.h for
-	 *                     details.
-	 *   marquee           The display
-	 *   h_queue           The queue to watch.
-	 *
-	 * Returns: pdPASS if a message was found in the queue, errQUEUE_EMPTY if
-	 *          the queue is empty.
-	 */
-	virtual BaseType_t begin(
-		const DisplayMessage& display_message,
-		Marquee *marquee,
-		QueueHandle_t h_queue) = 0;
+  /**
+   * Starts the display, then waits on the specified queue with an
+   * implementation-dependent timeout.
+   *
+   * Parameters:
+   * ----------
+   *
+   *   Name              Contents
+   *   ----------------- ---------------------------------------------------
+   *   display_message   Configures the display, e.g. foreground and
+   *                     background colors. See DisplayhMessage.h for
+   *                     details.
+   *   marquee           The display
+   *   h_queue           The queue to watch.
+   *
+   * Returns: pdPASS if a message was found in the queue, errQUEUE_EMPTY if
+   *          the queue is empty.
+   */
+  virtual BaseType_t begin(
+    const DisplayMessage& display_message,
+    Marquee *marquee,
+    QueueHandle_t h_queue) = 0;
 
-	/**
-	 * Updates the display, then waits on the specified queue with an
-	 * implementation-dependent timeout.
-	 *
-	 * Parameters:
-	 * ----------
-	 *
-	 *   Name              Contents
-	 *   ----------------- ---------------------------------------------------
-	 *   display_message   Configures the display, e.g. foreground and
-	 *                     background colors. See DisplayhMessage.h for
-	 *                     details.
-	 *   marquee           The display
-	 *   h_queue           The queue to watch.
-	 *
-	 * Returns: pdPASS if a message was found in the queue, errQUEUE_EMPTY if
-	 *          the queue is empty.
-	 */
-	virtual BaseType_t refresh(
-		const DisplayMessage& display_message,
-		Marquee *marquee,
-		QueueHandle_t h_queue) = 0;
+  /**
+   * Updates the display, then waits on the specified queue with an
+   * implementation-dependent timeout.
+   *
+   * Parameters:
+   * ----------
+   *
+   *   Name              Contents
+   *   ----------------- ---------------------------------------------------
+   *   display_message   Configures the display, e.g. foreground and
+   *                     background colors. See DisplayhMessage.h for
+   *                     details.
+   *   marquee           The display
+   *   h_queue           The queue to watch.
+   *
+   * Returns: pdPASS if a message was found in the queue, errQUEUE_EMPTY if
+   *          the queue is empty.
+   */
+  virtual BaseType_t refresh(
+    const DisplayMessage& display_message,
+    Marquee *marquee,
+    QueueHandle_t h_queue) = 0;
 protected:
-	DisplayMessage dummy_message;
+  DisplayMessage dummy_message;
 };
 
 #endif /* DISPLAYDRIVER_H_ */

@@ -17,10 +17,10 @@
 class DisplayDrivers {
 
 public:
-	DisplayDrivers();
-	~DisplayDrivers();
+  DisplayDrivers();
+  ~DisplayDrivers();
 
-	static DisplayDriver * of_type(DisplayCommand driverType);
+  static DisplayDriver * of_type(DisplayCommand driverType);
 };
 
 #endif /* DISPLAYDRIVERS_H_ */

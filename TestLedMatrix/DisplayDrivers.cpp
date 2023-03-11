@@ -52,28 +52,28 @@ DisplayDrivers::~DisplayDrivers() {
 };
 
 DisplayDriver * DisplayDrivers::of_type(DisplayCommand driver_type) {
-	DisplayDriver *result = 0;
-	switch(driver_type) {
-		default:
-		case ERROR:
-			result = &error_display;
-			break;
-		case FLASH_TWO_COLORS:  // TODO
-		case FILL_WITH_COLOR:
-			result = &display_fill;
-			break;
-		case SINGLE_PIXEL_NATURAL_ORDER:
-			result = &natural_order_single_pixel;
-			break;
-		case SINGLE_PIXEL_LEFT_TO_RIGHT:
-			result = &single_pixel_left_to_right;
-			break;
-		case STATIC_TEXT:
-			result = &static_text;
-			break;
-	}
+  DisplayDriver *result = 0;
+  switch(driver_type) {
+    default:
+    case ERROR:
+      result = &error_display;
+      break;
+    case FLASH_TWO_COLORS:  // TODO
+    case FILL_WITH_COLOR:
+      result = &display_fill;
+      break;
+    case SINGLE_PIXEL_NATURAL_ORDER:
+      result = &natural_order_single_pixel;
+      break;
+    case SINGLE_PIXEL_LEFT_TO_RIGHT:
+      result = &single_pixel_left_to_right;
+      break;
+    case STATIC_TEXT:
+      result = &static_text;
+      break;
+  }
 
-	return result;
+  return result;
 }
 
 // TODO(emintz): use a map.
