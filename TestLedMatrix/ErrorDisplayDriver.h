@@ -18,23 +18,23 @@
 
 class ErrorDisplayDriver : public DisplayDriver {
 public:
-	ErrorDisplayDriver();
-	virtual ~ErrorDisplayDriver();
+  ErrorDisplayDriver();
+  virtual ~ErrorDisplayDriver();
 
-	virtual BaseType_t begin(
-		const DisplayMessage& displayMessage,
-		Marquee *marquee,
-		QueueHandle_t h_queue);
+  virtual BaseType_t begin(
+    const DisplayMessage& displayMessage,
+    Marquee *marquee,
+    QueueHandle_t h_queue);
 
-	virtual BaseType_t refresh(
-		const DisplayMessage& displayMessage,
-		Marquee *marquee,
-		QueueHandle_t h_queue);
+  virtual BaseType_t refresh(
+    const DisplayMessage& displayMessage,
+    Marquee *marquee,
+    QueueHandle_t h_queue);
 
 private:
-	BaseType_t fill_display(
-			Marquee *marquee,
-			QueueHandle_t h_queue);
+  BaseType_t fill_display(
+      Marquee *marquee,
+      QueueHandle_t h_queue);
 };
 
 #endif /* ERRORDISPLAYDRIVER_H_ */

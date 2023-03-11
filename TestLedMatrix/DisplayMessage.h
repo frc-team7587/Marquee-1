@@ -19,16 +19,16 @@
 #include "FastLED.h"
 
 struct DisplayMessage {
-	const unsigned char *p_text; // Text to display
-	size_t text_length;          // Length of display text.
-	DisplayCommand command;      // How to display the text.
-	TickType_t delay1;           // First refresh delay
-	TickType_t delay2;           // Second refresh delay
-	CRGB foreground;             // Foreground color
-	CRGB background;             // Background color
+  const unsigned char *p_text; // Text to display
+  size_t text_length;          // Length of display text.
+  DisplayCommand command;      // How to display the text.
+  TickType_t delay1;           // First refresh delay
+  TickType_t delay2;           // Second refresh delay
+  CRGB foreground;             // Foreground color
+  CRGB background;             // Background color
 
-	DisplayMessage();
-	const DisplayMessage& operator=(const DisplayMessage& rhs);
+  DisplayMessage();
+  const DisplayMessage& operator=(const DisplayMessage& rhs);
 };
 
 #endif /* DISPLAYMESSAGE_H_ */

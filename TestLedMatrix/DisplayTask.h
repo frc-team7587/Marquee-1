@@ -17,24 +17,24 @@
 
 class DisplayTask {
 public:
-	DisplayTask(Marquee *marquee);
-	virtual ~DisplayTask();
+  DisplayTask(Marquee *marquee);
+  virtual ~DisplayTask();
 
-	/**
-	 * The task, an endless loop that manages the display
-	 *
-	 * Parameters:
-	 * ----------
-	 *
-	 *   Name              Contents
-	 *   ----------------- ---------------------------------------------------
-	 *   h_queue           Handle to the FreeRTOS queue that carries display
-	 *                     messages to the display management loop.
-	 */
-	void run(QueueHandle_t h_queue);
+  /**
+   * The task, an endless loop that manages the display
+   *
+   * Parameters:
+   * ----------
+   *
+   *   Name              Contents
+   *   ----------------- ---------------------------------------------------
+   *   h_queue           Handle to the FreeRTOS queue that carries display
+   *                     messages to the display management loop.
+   */
+  void run(QueueHandle_t h_queue);
 
 private:
-	Marquee *marquee;
+  Marquee *marquee;
 };
 
 #endif /* DISPLAYTASK_H_ */
