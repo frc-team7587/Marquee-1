@@ -24,4 +24,5 @@ private:
         QueueHandle_t h_queue);
 
     const TypeFace& type_face;
+    int16_t column_shift;
 };

@@ -1,7 +1,8 @@
 #include "ScrollingTextDriver.h"
 
 ScrollingTextDriver::ScrollingTextDriver(const TypeFace& type_face) :
-    type_face(type_face) {
+    type_face(type_face),
+    column_shift(0) {
 }
 
 ScrollingTextDriver::~ScrollingTextDriver() {
@@ -11,6 +12,7 @@ BaseType_t ScrollingTextDriver::begin(
 		const DisplayMessage& displayMessage,
 		Marquee *marquee,
 		QueueHandle_t h_queue) {
+    column_shift = 0;
 	return write_text(displayMessage, marquee, h_queue);
 }
 
@@ -37,20 +39,21 @@ BaseType_t ScrollingTextDriver::write_text(
 	int columns_in_marquee = marquee->columns();
 	int rows = type_face.char_height();
 
-    for (int column_shift = 0; column_shift < columns_in_string; column_shift++) {
-        for (int column = 0; column < columns_in_marquee; column++) {
-            // Stops it from displaying columns 
-            if (column + column_shift > columns_in_string) {
-                continue;
-            }
-            for (int row = 0; row < rows; row++) {
-                if (type_face.bit_at(p_text, text_length, row, column + column_shift)) {
-                    marquee->set_pixel(row, column, &foreground);
-                }
+    for (int column = 0; column < columns_in_marquee; column++) {
+        // Stops it from displaying columns past the string
+        if (column + column_shift > columns_in_string) {
+            continue;
+        }
+        for (int row = 0; row < rows; row++) {
+            if (type_face.bit_at(p_text, text_length, row, column + column_shift)) {
+                marquee->set_pixel(row, column, &foreground);
             }
         }
     }
+    
+    // Increment the column shift for next frame
+    column_shift++;
 	
 	marquee->show();
-    return xQueuePeek(h_queue, &display_message, pdMS_TO_TICKS(10000));
+    return xQueuePeek(h_queue, &display_message, pdMS_TO_TICKS(20));
 }
