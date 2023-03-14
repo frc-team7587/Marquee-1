@@ -34,6 +34,7 @@
 #include "TypeFace6x8.h"
 #include "StaticTextDriver.h"
 #include "SinglePixelLeftToRight.h"
+#include "ScrollingTextDriver.h"
 
 TypeFace6x8 type_face;
 
@@ -43,6 +44,7 @@ ErrorDisplayDriver error_display;
 NaturalOrderSinglePixelDriver natural_order_single_pixel;
 StaticTextDriver static_text(type_face);
 SinglePixelLeftToRight single_pixel_left_to_right;
+ScrollingTextDriver scrolling_text(type_face);
 
 
 DisplayDrivers::DisplayDrivers() {
@@ -71,6 +73,9 @@ DisplayDriver * DisplayDrivers::of_type(DisplayCommand driver_type) {
 		case STATIC_TEXT:
 			result = &static_text;
 			break;
+        case SCROLLING_TEXT: 
+            result = &scrolling_text;
+            break;
 	}
 
 	return result;
