@@ -1,3 +1,5 @@
+#include "freertos/FreeRTOS.h"
+#include "freertos/queue.h"
 #include "ScrollingTextDriver.h"
 
 ScrollingTextDriver::ScrollingTextDriver(const TypeFace& type_face) :
