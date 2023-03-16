@@ -83,11 +83,12 @@ All display drivers:
       usage.
 * Have a static instance defined in `DisplayDrivers.cpp`.
 * Are returned by a case in `DisplayDrivers::of_type()`.
+* Have a DisplayCommand in the command table in `CommandPublisher.cpp`.
 
 C++ enumerations have integer values which, unless otherwise specified,
 start from 0. This is the display command value that specifies the triver.
 
-:note: **NOTE** When you add a value to the `DisplayCommand` enumeration,
+**NOTE** When you add a value to the `DisplayCommand` enumeration,
        make sure that `NUMBER_OF_COMMANDS` remains in **LAST** place.
        Failure to to so will cause undefined behavior.
 

@@ -18,6 +18,7 @@ static const DisplayCommand command_table[] = {
   SINGLE_PIXEL_NATURAL_ORDER,
   SINGLE_PIXEL_LEFT_TO_RIGHT,
   STATIC_TEXT,
+  SCROLLING_TEXT
 };
 
 enum CharacterType {
