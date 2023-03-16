@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "DisplayDriver.h"
 #include "TypeFace.h"
+#include "FastLED.h"
 
 class ScrollingTextDriver : public DisplayDriver {
 public:
