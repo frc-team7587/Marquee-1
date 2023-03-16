@@ -88,7 +88,7 @@ All display drivers:
 C++ enumerations have integer values which, unless otherwise specified,
 start from 0. This is the display command value that specifies the triver.
 
-:**NOTE** When you add a value to the `DisplayCommand` enumeration,
+**NOTE** When you add a value to the `DisplayCommand` enumeration,
        make sure that `NUMBER_OF_COMMANDS` remains in **LAST** place.
        Failure to to so will cause undefined behavior.
 
