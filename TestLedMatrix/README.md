@@ -190,7 +190,7 @@ Signal input wires are labeled and connected to the ESP32 as follows:
 | White | GND   | GND       | Signal ground                     |
 | Red   | 5V    | N/C       | Not connected.
 
-:note: **NOTE** The LED matrix control signals run at 800 KHz, a typical frequency for an AM radio station.
+**NOTE** The LED matrix control signals run at 800 KHz, a typical frequency for an AM radio station.
 (WNYC AM broadcasts at 820 KHz.) Control signals must be hard wired to the three pin female LED matrix
 control socket. Be sure to solder all joints. Lever style connectors render the connection useless.
 
