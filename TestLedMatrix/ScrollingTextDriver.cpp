@@ -41,7 +41,7 @@ BaseType_t ScrollingTextDriver::write_text(
 
     for (int column = 0; column < columns_in_marquee; column++) {
         // Stops it from displaying columns past the string
-        if (column + column_shift > columns_in_string) {
+        if (column + column_shift => columns_in_string) {
             continue;
         }
         for (int row = 0; row < rows; row++) {
