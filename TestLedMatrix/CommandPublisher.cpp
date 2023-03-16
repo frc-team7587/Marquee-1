@@ -17,8 +17,8 @@ static const DisplayCommand command_table[] = {
   FLASH_TWO_COLORS,
   SINGLE_PIXEL_NATURAL_ORDER,
   SINGLE_PIXEL_LEFT_TO_RIGHT,
-  SCROLLING_TEXT,
   STATIC_TEXT,
+  SCROLLING_TEXT
 };
 
 enum CharacterType {
