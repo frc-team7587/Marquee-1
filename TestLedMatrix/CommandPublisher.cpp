@@ -226,7 +226,7 @@ static const CommandPublisher::STATE
 
 static CharacterType character_type_of(int incoming_byte) {
   CharacterType character_type = CharacterType::INVALID;
-  if (' ' <= incoming_byte && incoming_byte <= '~'
+  if ((' ' <= incoming_byte && incoming_byte <= '~')
       || incoming_byte == '\n'
       || incoming_byte == '\r') {
     switch (incoming_byte) {
