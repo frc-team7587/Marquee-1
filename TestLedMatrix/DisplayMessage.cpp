@@ -9,6 +9,7 @@
 
 DisplayMessage::DisplayMessage()  :
   p_text(0),
+  text_length(0),
   delay1(0),
   delay2(0),
   command(),
