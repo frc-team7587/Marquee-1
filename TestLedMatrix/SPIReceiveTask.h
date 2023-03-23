@@ -50,63 +50,63 @@
 #include "ReceivedCommand.h"
 
 class SPIReceiveTask {
-	size_t buffer_lengths;
-	uint8_t *receive_buffer;
-	uint8_t *send_buffer;
-	spi_slave_transaction_t slave_transaction;
-	ReceivedCommand received_command_message;
-	CommandPublisher *command_publisher;
-	TaskHandle_t h_task;
+  size_t buffer_lengths;
+  uint8_t *receive_buffer;
+  uint8_t *send_buffer;
+  spi_slave_transaction_t slave_transaction;
+  ReceivedCommand received_command_message;
+  CommandPublisher *command_publisher;
+  TaskHandle_t h_task;
 
-	/**
-	 * Runs the task.
-	 */
-	void run();
+  /**
+   * Runs the task.
+   */
+  void run();
 
-	/**
-	 * Starts the receiver. Note that params must be a pointer to a
-	 * receive_configuration (see above) instance.
-	 */
-	static void receive(void * params);
+  /**
+   * Starts the receiver. Note that params must be a pointer to a
+   * receive_configuration (see above) instance.
+   */
+  static void receive(void * params);
 
 public:
 
-	/**
-	 * Creates the receiver and allocates all required buffers..
-	 *
-	 * Parameters:
-	 * ----------
-	 *
-	 *   Name              Contents
-	 *   ----------------- ---------------------------------------------------
-	 *   command_publisher Parses and publishes the text formatted command
-	 *                     received from the RoboRio
-	 *   buffer_lengths    Length of the receive and send buffers in bytes
-	 *   receive_buffer    Receives data sent by the RoboRio. Must be word-aligned
-	 *                     and reside in DMA-accessible memory.
-	 *   send_buffer       Holds data to be sent to the RoboRio. Must be
-	 *                     word aligned and reside in DMA-accessible memory.
-	 */
-	SPIReceiveTask(
-		CommandPublisher *command_publisher,
-		size_t buffer_lengths,
-		uint8_t *receive_buffer,
-		uint8_t *send_buffer);
+  /**
+   * Creates the receiver and allocates all required buffers..
+   *
+   * Parameters:
+   * ----------
+   *
+   *   Name              Contents
+   *   ----------------- ---------------------------------------------------
+   *   command_publisher Parses and publishes the text formatted command
+   *                     received from the RoboRio
+   *   buffer_lengths    Length of the receive and send buffers in bytes
+   *   receive_buffer    Receives data sent by the RoboRio. Must be word-aligned
+   *                     and reside in DMA-accessible memory.
+   *   send_buffer       Holds data to be sent to the RoboRio. Must be
+   *                     word aligned and reside in DMA-accessible memory.
+   */
+  SPIReceiveTask(
+    CommandPublisher *command_publisher,
+    size_t buffer_lengths,
+    uint8_t *receive_buffer,
+    uint8_t *send_buffer);
 
-	/**
-	 * Destructor -- for the sake of completeness. It's never invoked.
-	 */
-	virtual ~SPIReceiveTask();
+  /**
+   * Destructor -- for the sake of completeness. It's never invoked.
+   */
+  virtual ~SPIReceiveTask();
 
-	/**
-	 * Configures the SPIO I/O pins
-	 */
-	static void configure_gpio();
+  /**
+   * Configures the SPIO I/O pins
+   */
+  static void configure_gpio();
 
-	/**
-	 * Starts the SPI receive task.
-	 */
-	void start();
+  /**
+   * Starts the SPI receive task.
+   */
+  void start();
 };
 
 #endif /* SPIRECEIVETASK_H_ */
