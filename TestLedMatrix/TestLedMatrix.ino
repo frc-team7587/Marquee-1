@@ -22,6 +22,8 @@
 #include "DisplayManager.h"
 #include "DisplayTask.h"
 #include "FastLED.h"
+#include "I2CCommandHandler.h"
+// #include "I2CReceiveTask.h"
 #include "Marquee.h"
 #include "Panels.h"
 #include "SerialReadTask.h"
@@ -47,11 +49,13 @@ static DisplayDrivers drivers;
 static DisplayManager display_manager(&drivers, &marquee);
 
 static CommandPublisher command_publisher;
+static I2CCommandHandler i2c_command_handler(&command_publisher);
+// static I2CReceiveTask i2c_receive_task(&command_publisher);
 static SPIReceiveTask spi_receive_task(
-		&command_publisher,
-		MAX_SPI_MESSAGE,
-		spi_receive_buffer,
-		spi_send_buffer);
+    &command_publisher,
+    MAX_SPI_MESSAGE,
+    spi_receive_buffer,
+    spi_send_buffer);
 static SerialReadTask read_task(&command_publisher);
 
 
@@ -105,7 +109,17 @@ void setup() {
     3,
     &h_serial_communication_manager);
 
-	spi_receive_task.start();
+  spi_receive_task.start();
+
+//  esp_err_t i2c_init_status = i2c_receive_task.begin();
+//  if (i2c_init_status != ESP_OK) {
+//    Serial.print("I2C initialization failed with status: ");
+//    Serial.println(i2c_init_status);
+//  } else {
+//    Serial.println("I2C driver configured and loaded.");
+//  }
+//  i2c_receive_task.start();
+  i2c_command_handler.begin();
 
   DisplayMessage left_to_right_message;
   left_to_right_message.p_text = NULL;
