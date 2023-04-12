@@ -25,13 +25,33 @@
 #define MAX_MESSAGE_LEN 128
 #define MESSAGE_BUFFER_LEN (MAX_MESSAGE_LEN + 2)
 
-#define MARQUEE_SLAVE_ADDRESS 0xA
-
 class I2CCommandHandler {
+  enum State {
+    I2C_HANDLER_STATE_CREATED,  // Initial state
+    I2C_HANDLER_STATE_ACCUMULATING,  // Accumulating characters
+    I2C_HANDLER_STATE_COMPLETE,  // Message completed normally (no errors).
+    I2C_HANDLER_STATE_OVERFLOWING,  // Message overflowing its buffer
+    I2C_HANDLER_STATE_OVERFLOWED,  // Overflowing message ended
+    I2C_HANDLER_STATE_UNDERFLOWED,  // Message too short
+    I2C_HANDLER_STATE_ERROR,  // An internal error occurred.
+    I2C_NUMBER_OF_STATES,  // State count, MUST be last
+  };
+
+  enum Event {
+    I2C_EVENT_CHARACTER,  // Message character received
+    I2C_EVENT_MESSAGE_ENDS,  // Message end (0xFF) received when expected
+    I2C_EVENT_OVERFLOW,  // Excess character received
+    I2C_EVENT_UNDERFLOW,  // Message end (0xFF) received early.
+    I2C_NUMBER_OF_EVENTS,  // Event count, MUST be last.
+  };
+
+  static State TRANSITION_TABLE[I2C_NUMBER_OF_STATES][I2C_NUMBER_OF_EVENTS];
+
   static I2CCommandHandler * command_handler;
 
   uint8_t message_buffer[MESSAGE_BUFFER_LEN];
   size_t character_count;
+  State current_state;
 
   CommandPublisher *command_publisher;
 
