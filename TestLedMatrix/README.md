@@ -154,7 +154,7 @@ if 5 Volts is applied to ANY pin **EXCEPT** 5V. The 5V pin connects to a voltage
 that reduces 5 Voltes to 3.5, which allows the board (**NOT** the chip)
 to run on 5 Volt power. All 5 Volt power, including power provided via
 USB, MUST be routed to the regulator. Be **EXTREMELY CAREFUL** when supplying
-power to the board.
+power to the board. Reversing polarity will ruin the chip.
 
 Note that we must connect all grounds together. This includes
 
@@ -162,12 +162,15 @@ Note that we must connect all grounds together. This includes
 - Power supply ground
 - LED array ground
 
-### Wiring the Marquee
+The ESP32 has three ground pins: 14, 32, and 38. They are interchangeable.
+
+### Wiring the Display Panel
 
 The Marquee has three sets of wires:
 
 * Red, green, and white signal output wires atached to a 3 pin female connector. These are used
-  for daisy chaining panels. We don't use them.
+  for daisy chaining panels. Since we only have a single panel, leave them be and tuck them out
+  of the way. 
 * Unterminated (no connector attached) red and black wires for power. We apply power here.
 * Red, green, and white signal input wires attached to a 3 pin male connecter for signal and
   optional power input. We only use the signal wires.
@@ -179,8 +182,9 @@ Wires are labeled where they attach to the panel. The power wire labels are
 | Red   | 5V    | +5 Volt power |
 | Black | GND   | Ground        |
 
-Connect the power wires directly to a 5 Volt 75 Watt power source. Do not connect
-them to the ESP32. 
+Connect the power wires directly to a 5 Volt 75 Watt power source. Double check polarity
+before powering up the panel, as connecting the power backward will wreck the panel. Do
+not connect the power wires to the ESP32. 
 
 Signal input wires are labeled and connected to the ESP32 as follows:
 
@@ -203,14 +207,15 @@ and use the USB only for communication.
 
 ### Direct Connect 5 Volt Power
 
-Wire the chip as follows to power the ESP32 from the 5 Volt power supply. We will do
-this only during development, and only if the USB cable cannot provide enough power.
-To comply with FIRST specification, we **WILL NOT** use this on the robot.
+To power the ESP32 from a 5V supply, Wire the chip as follows
 
 | Pin Number | Pin Name | Connect To |
 | ---------- | -------- | ---------- |
 |         19 | Vin 5V   | 5 Volt Power |
 |         38 | GND      | Plugboard ground (blue row on the solderless breadboard power strip) |
+
+Note that the standard 5V power supply cannot power the ESP32. We must provide
+an independent power source.
 
 ### Direct Connect 3.3 Volt Power
 
@@ -222,11 +227,39 @@ power supply.
 |          1 | V 3.3    | 3.3 Volt Power (from the PDP when installed) |
 |         38 | GND      | Plugboard ground (blue row on the plugboard power strip) |
 
-### Communications With the RoboRio
+## Communications With the RoboRio
 
-We have elected to communicate via USB. The ESP32 emulates an [RS232](https://en.wikipedia.org/wiki/RS-232)
-connect that is also called a `tty`. The ESP32 emulates a [serial port](https://en.wikipedia.org/wiki/Serial_port) 
-that is configured as follows
+The sender provides a newline ('\n')-terminated, pipe ('|) delimited string whose fields
+contain the following. Note that the terminating newline f"ollows directly after
+the final field. There must **NOT** be an interviening pipe. An optional return ('\r') **MAY**
+precede the newline. Please see `SerialReadTask.h` for details.
+
+The ESP32 supports three input types.
+
+1. Serial [USB](https://en.wikipedia.org/wiki/USB) terminal emulation
+2. [SPI](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface)
+3. [I2C](https://en.wikipedia.org/wiki/I%C2%B2C)
+
+
+Each has unique characteristics, including wiring, message format, and limitations.
+While all three connections are supported, only one must be active at any given time.
+Multiple connections are not supported.
+
+The following sections refer to RoboRio interfaces. Please refer to the
+[documentation](https://www.ni.com/docs/en-US/bundle/roborio-20-umanual/page/umanual.html).
+for details. Note that the RoboRio's ground pins are labeled with the
+standard 
+[ground symbol](https://www.ni.com/en-us/support/documentation/supplemental/18/chassis--earth-and-signal-grounding--terminology-and-symbols.html#:~:text=Most%20of%20the%20time%20the,chassis%20and%20earth%20ground%2C%20respectively.).
+
+### USB
+
+The ESP32 breakout board has a built-in USB to asychronous converter that emulates an
+[RS232](https://en.wikipedia.org/wiki/RS-232) connection, a.k.a. a `tty`. It
+expects the messasge described above as a sequence of ASCII characters. Because
+the protocol supports variable length I/O, the message must **NOT** be padded.
+
+The ESP32 emulates a [serial port](https://en.wikipedia.org/wiki/Serial_port) 
+configured as follows
 
 | Parameter | Value  | Description |
 | --------- | ------ | ----------- |
@@ -235,3 +268,57 @@ that is configured as follows
 | Stop Bits | 1      | The number of stop bits, the bit(s) that signal the end of a character. |
 | Data Bits | 8      | The number of bits in a character. |
  
+Connection is simple: run a high quality USB A to mini cord from the RoboRio to the ESP32. Be
+sure to use a high quality cable to ensure a reliable connection. The ESP32 is extremely fussy.
+
+The connection transmits 11520 characters/second, fast enough, but slow by today's standards. 
+
+### SPI
+
+The ESP32 accepts input over its built in Serial Peripheral Interface. SPI
+is a high speed protocol that supports 80 MHz, a bit over 8 million
+characters/second, far faster than we need. Its high speed imposes
+the following requirements:
+
+1. Wires must be kept short and direct. Prefer soldering when joining wires.
+   Wagos and their ilk block the signal.
+2. Messages must contain 128 bytes containing the command string followed by
+   zeros. Limit the command string to 126 characters including the newline.
+
+Please see [Wikipedia](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface)
+for details. Connect the RoboRio to the ESP32 as follows:
+
+| Signal Name          | RoboRio Pin | ESP32 GPIO Pin  | 
+| -------------------- | ----------- | --------------- |
+| Chip Select          | `CS0`       | GPIOP 5 (SS)    |
+| Master Out, Slave In | `COPI`      | GPIOP 23 (MOSI) |
+| Master In, Slave Out | `CIPO`      | GPIOP 19 (MISO) |
+| Ground               | Ground      | Ground          |
+
+As always, do not connect RoboRio power to the ESP32.
+
+### I2C
+
+The ESP32 accepts input over its built-in 
+[Inter-Integrated Circuit](https://en.wikipedia.org/wiki/I%C2%B2C)
+interface. Connect the devices as follows:
+
+| Signal Name          | RoboRio Pin | ESP32 GPIO Pin     | 
+| -------------------- | ----------- | ------------------ |
+| Clock                | SCL         | GPIOP 22 (I2C SCL) |
+| Data                 | SDA         | GPIOP 31 (I2C SDA) |
+| Ground               | Ground      | Ground             |
+
+
+As always, do not connect RoboRio power to the ESP32.
+
+Like SPI, the I2C interface accepts fixed length 128 byte messages.
+Zero fill the message on the right, then set the last byte to
+0xFF, all ones. The input routine uses 0xFF to reestablish
+sinc when things go wrong.
+
+Note that the ESP32 must be fitted with 4.7 KOhm pullup
+resistors on I2C SCL and I2C SDA. Since the RoboRio has
+internal pullup resistors, it does not require external
+resistors.
+
