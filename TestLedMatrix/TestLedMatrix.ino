@@ -23,7 +23,6 @@
 #include "DisplayTask.h"
 #include "FastLED.h"
 #include "I2CCommandHandler.h"
-// #include "I2CReceiveTask.h"
 #include "Marquee.h"
 #include "Panels.h"
 #include "SerialReadTask.h"
@@ -111,14 +110,6 @@ void setup() {
 
   spi_receive_task.start();
 
-//  esp_err_t i2c_init_status = i2c_receive_task.begin();
-//  if (i2c_init_status != ESP_OK) {
-//    Serial.print("I2C initialization failed with status: ");
-//    Serial.println(i2c_init_status);
-//  } else {
-//    Serial.println("I2C driver configured and loaded.");
-//  }
-//  i2c_receive_task.start();
   i2c_command_handler.begin();
 
   DisplayMessage left_to_right_message;
