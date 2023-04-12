@@ -1,7 +1,9 @@
 /**
  * Reads a line from the USB serial port and retransmits it over I2C to
  * a fixed slave address. This sketch is used to validate controlling the
- * Marquee over I2C.
+ * Marquee over I2C. The I2C message is fixed length, 128 byte, zero
+ * filled ASCII string terminated by a new line character. The last byte
+ * of the buffer must contain 0xFF so the receiver can keep in sync.
  *
  * Note: the slave I2C address must not conflict with the gyro address,
  * which defaults to 0x27, but can be set to 0x28 or 0x40. The team uses
@@ -53,21 +55,28 @@ void setup() {
   Serial.println(__TIME__);
 
   memset(message_to_forward, 0, FORWARDED_MESSAGE_BUFFER_SIZE);
+  message_to_forward[FORWARDED_MESSAGE_SIZE - 1] = 0xFF;
   character_count = 0;
 
-  i2c_config_t i2c_config;
-  memset(&i2c_config, 0, sizeof(i2c_config));
-  i2c_config.mode = I2C_MODE_MASTER;
-  i2c_config.sda_io_num = I2C_MASTER_SDA_IO;
-  i2c_config.sda_pullup_en = GPIO_PULLUP_ENABLE;
-  i2c_config.scl_io_num = I2C_MASTER_SCL_IO;
-  i2c_config.scl_pullup_en = GPIO_PULLUP_ENABLE;
-  i2c_config.master.clk_speed = I2C_MASTER_FREQ_HZ;
-  i2c_config.clk_flags = 0;
-
   Wire.begin();
-
+  Wire.setTimeout(500);
   Serial.println("Initialization complete.");
+}
+
+size_t send_chunk(uint8_t * message, size_t number_so_far, size_t message_length) {
+  size_t number_sent = 0;
+  size_t number_to_send = message_length - number_so_far;
+  if (32 < number_to_send) {
+    number_to_send = 32;
+  }
+  if (0 < number_to_send) {
+    Wire.beginTransmission(SLAVE_ADDRESS);
+    number_sent = Wire.write(message + number_so_far, number_to_send);
+    Wire.endTransmission(true);
+  }
+
+  Serial.printf("send_chunk returns %d.\n", number_sent);
+  return number_sent;
 }
 
 // The loop function is called in an endless loop
@@ -82,17 +91,29 @@ void loop() {
           Serial.print((char *) message_to_forward);
           Serial.println("<<<");
           Wire.beginTransmission(SLAVE_ADDRESS);
-          Wire.write(message_to_forward, FORWARDED_MESSAGE_SIZE);
-          Wire.endTransmission();
+          size_t total_chars_sent = 0;
+          while (total_chars_sent < FORWARDED_MESSAGE_SIZE) {
+//            total_chars_sent += send_chunk(message_to_forward, total_chars_sent, FORWARDED_MESSAGE_SIZE);
+            size_t number_sent =
+                Wire.write(
+                    message_to_forward + total_chars_sent,
+                    FORWARDED_MESSAGE_SIZE - total_chars_sent);
+            Serial.printf("%d characters written,\n", number_sent);
+            total_chars_sent += number_sent;
+            Serial.printf("Have sent %d characters so far.\n", total_chars_sent);
+          }
+          byte err = Wire.endTransmission(true);
+          Serial.printf("Sent %d characters in all with status %d.\n", total_chars_sent, err);
         } else {
           Serial.println("Truncated message dropped.");
         }
         memset(message_to_forward, 0, FORWARDED_MESSAGE_BUFFER_SIZE);
+        message_to_forward[FORWARDED_MESSAGE_SIZE - 1] = 0xFF;
         character_count = 0;
         overflow = false;
       }
     } else {
-      if (!overflow) {
+      if (overflow) {
         Serial.println("Buffer overflow.");
       }
       overflow = true;
