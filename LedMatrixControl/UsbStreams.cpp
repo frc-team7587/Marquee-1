@@ -11,6 +11,7 @@
 #include <errno.h> // Error integer and strerror() function
 #include <fcntl.h>
 #include <iostream>
+#include <string.h>
 #include <stdio.h>
 #include <termios.h>
 #include <unistd.h>
@@ -18,26 +19,11 @@
 static bool configure_serial_file_descriptor(int fd) {
 	bool status = false;
 	if (0 < fd) {
-		struct termios usb_config;
+		termios usb_config;
+		memset(&usb_config, 0, sizeof(usb_config));
 		// POSIX requires us to retrieve the current USB/Serial configuration
 		if ((status = tcgetattr(fd, &usb_config)) == 0) {
-			usb_config.c_cflag &= ~PARENB;          // No parity
-			usb_config.c_cflag &= ~CSTOPB;          // One stop bit.
-			usb_config.c_cflag &= ~CSIZE;           // Clear #bits/char
-			usb_config.c_cflag &= CS8;              // 8 bit characters
-			usb_config.c_cflag |= ~CRTSCTS;         // Disable RTS/CTS flow control
-			usb_config.c_cflag |= (CREAD | CLOCAL); // Turn on READ & ignore ctrl lines (CLOCAL = 1)
-
-			usb_config.c_iflag &= ~(IXON | IXOFF | IXANY); // Turn off s/w flow ctrl
-			usb_config.c_iflag &= ~(IGNBRK|BRKINT|PARMRK|ISTRIP|INLCR|IGNCR|ICRNL); // Disable any special handling of received bytes
-
-			usb_config.c_oflag &= ~OPOST; // Prevent special interpretation of output bytes (e.g. newline chars)
-			usb_config.c_oflag &= ~ONLCR; // Prevent conversion of newline to carriage return/line feed
-
-			usb_config.c_lflag &= ~ECHO;   // Disable echo
-			usb_config.c_lflag &= ~ECHOE;  // Disable erasure
-			usb_config.c_lflag &= ~ECHONL; // Disable new-line echo
-
+			cfmakeraw(&usb_config);
 			cfsetispeed(&usb_config, B115200);
 			cfsetospeed(&usb_config, B115200);
 			status = tcsetattr(fd, TCSANOW, &usb_config) == 0;
@@ -51,7 +37,11 @@ static int open_with_error_report(std::string device_path, int flags) {
 	if (fd < 0) {
 		std::cout << "Error opening " << device_path << " error "
 			<< errno << std::endl << std::flush;
+	} else {
+		std::cout << device_path << " opened on file descriptor "
+				<< fd << std::endl;
 	}
+	return fd;
 }
 
 namespace application {
@@ -104,4 +94,4 @@ UsbStreams::~UsbStreams() {
 	}
 }
 
-} /* namespace spaminterceptor */
+} /* namespace application */

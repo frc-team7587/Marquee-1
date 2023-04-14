@@ -5,7 +5,18 @@
  *      Author: Eric Mintz
  *
  * Opens the serial USB connection to the microcontroller
- * on two files, one for input, one for output.
+ * on two files, one for input, one for output. Configure I/O
+ * as follows:
+ *
+ * Setting                       Value
+ * -----------                   ------------------------------------------
+ * Speed                         115200 bits/second
+ * Flow control                  off
+ * Echo                          off
+ * Bits/Character                8
+ * Stop bits                     1
+ * Parity                        None
+ * Special character conversion  off
  */
 
 #ifndef USBSTREAMS_H_

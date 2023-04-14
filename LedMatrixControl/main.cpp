@@ -88,8 +88,9 @@ void *usb_output_to_screen(void *parms) {
 					pchar = usb_output_buffer;
 					break;
 				default:
+					char the_char = (char) input_byte;
 					if (pchar < (usb_output_buffer + (sizeof(usb_output_buffer) - 2))) {
-						*pchar++ = (char) input_byte;
+						*pchar++ = the_char;
 					}
 			}
 		}
@@ -111,11 +112,13 @@ int main(int argc, char **argv) {
 	if (0 < output_file_handle && 0 < input_file_handle) {
 		usb_to_screen_config screen_config;
 		screen_config.usb_file = input_file_handle;
-		pthread_create(
+		int pthread_status = pthread_create(
 				&h_usb_to_terminal,
 				NULL,
 				usb_output_to_screen,
 				(void *)(&screen_config));
+		std::cout << "Input monitoring thread creation status is: "
+				<< pthread_status << std::endl;
 		if (0 < output_file_handle) {
 			while((!std::cin.rdbuf()->in_avail())) {
 				send_to_usb_and_sleep(output_file_handle, FILL_WITH_BLACK, 5);

@@ -44,4 +44,4 @@ FindSerialUsb::FindSerialUsb() :
 FindSerialUsb::~FindSerialUsb() {
 }
 
-} /* namespace spaminterceptor */
+} /* namespace application */
