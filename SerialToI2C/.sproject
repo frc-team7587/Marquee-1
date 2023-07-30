@@ -1,10 +1,10 @@
 Config.Release.board.BOARD.ID=node32s
-Config.Release.board.BOARD.MENU.DebugLevel=none
-Config.Release.board.BOARD.MENU.EraseFlash=none
-Config.Release.board.BOARD.MENU.FlashFreq=80
-Config.Release.board.BOARD.MENU.PartitionScheme=default
-Config.Release.board.BOARD.MENU.UploadSpeed=921600
-Config.Release.board.BOARD.TXT=${SLOEBER_HOME}/arduinoPlugin/packages/esp32/hardware/esp32/2.0.7/boards.txt
+Config.Release.board.BOARD.MENU.DebugLevel=getMenuItemIDFromMenuItemName did not find menu item with name "" for menu ID "DebugLevel" and for boardID "node32s"!
+Config.Release.board.BOARD.MENU.EraseFlash=getMenuItemIDFromMenuItemName did not find menu item with name "" for menu ID "EraseFlash" and for boardID "node32s"!
+Config.Release.board.BOARD.MENU.FlashFreq=getMenuItemIDFromMenuItemName did not find menu item with name "" for menu ID "FlashFreq" and for boardID "node32s"!
+Config.Release.board.BOARD.MENU.PartitionScheme=getMenuItemIDFromMenuItemName did not find menu item with name "" for menu ID "PartitionScheme" and for boardID "node32s"!
+Config.Release.board.BOARD.MENU.UploadSpeed=getMenuItemIDFromMenuItemName did not find menu item with name "" for menu ID "UploadSpeed" and for boardID "node32s"!
+Config.Release.board.BOARD.TXT=${SLOEBER_HOME}/arduinoPlugin/packages/esp32/hardware/esp32/2.0.10/boards.txt
 Config.Release.board.PROGRAMMER.NAME=
 Config.Release.board.UPLOAD.PORT=/dev/ttyUSB3
 Config.Release.compile.sloeber.extra.all=

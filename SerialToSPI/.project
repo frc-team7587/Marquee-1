@@ -34,17 +34,17 @@
 		<link>
 			<name>core/core</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/2.0.5/cores/esp32</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/2.0.8/cores/esp32</locationURI>
 		</link>
 		<link>
 			<name>core/variant</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/2.0.5/variants/node32s</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/2.0.8/variants/node32s</locationURI>
 		</link>
 		<link>
 			<name>libraries/SPI</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/2.0.5/libraries/SPI</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/2.0.8/libraries/SPI</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>

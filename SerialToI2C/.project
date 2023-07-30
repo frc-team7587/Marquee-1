@@ -34,17 +34,17 @@
 		<link>
 			<name>core/core</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/2.0.7/cores/esp32</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/2.0.10/cores/esp32</locationURI>
 		</link>
 		<link>
 			<name>core/variant</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/2.0.7/variants/node32s</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/2.0.10/variants/node32s</locationURI>
 		</link>
 		<link>
 			<name>libraries/Wire</name>
 			<type>2</type>
-			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/2.0.7/libraries/Wire</locationURI>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/esp32/hardware/esp32/2.0.10/libraries/Wire</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
