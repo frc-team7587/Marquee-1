@@ -31,6 +31,7 @@
 #include "PwmPinsAndChannels.h"
 
 #define BUILTIN_LED 2
+#define HONORING_CONTRACTS_NOT 4
 
 #define NUM_LEDS (8 * 32)
 
@@ -77,6 +78,11 @@ void setup() {
   Serial.begin(115200);
   Serial.setRxBufferSize(256);
   pinMode(BUILTIN_LED, OUTPUT);
+
+  // The sketch cannot honor its contracts until it is initialized
+  pinMode(HONORING_CONTRACTS_NOT, OUTPUT);
+  digitalWrite(HONORING_CONTRACTS_NOT, HIGH);
+
   Serial.print("Team 7587, Metuchen Momentum marquee compiled on ");
   Serial.print(__DATE__);
   Serial.print(" at ");
@@ -123,6 +129,8 @@ void setup() {
   xQueueSendToBack(
     h_command_queue, &left_to_right_message, pdMS_TO_TICKS(1));
 
+  digitalWrite(HONORING_CONTRACTS_NOT, LOW);
+  Serial.println("Initialization complete, honoring all contracts.");
 }
 
 // The loop function is called in an endless loop
