@@ -232,7 +232,26 @@ power supply.
 The sender provides a newline ('\n')-terminated, pipe ('|) delimited string whose fields
 contain the following. Note that the terminating newline f"ollows directly after
 the final field. There must **NOT** be an interviening pipe. An optional return ('\r') **MAY**
-precede the newline. Please see `SerialReadTask.h` for details.
+precede the newline.
+
+The command has the following format:
+
+
+| Field No. | Contents                                           |
+| --------- | -------------------------------------------------- |
+|         0 | The text to display, if any                        |
+|         1 | The display command                                |
+|         3 | Delay 1                                            |
+|         4 | Delay 2                                            |
+|         5 | Foreground red intensity                           |
+|         6 | Foreground green intensity                         |
+|         7 | Foreground blue intensity                          |
+|         8 | Background red intensity                           |
+|         9 | Background green intesity                          |
+|        10 | Background blue intensity                          |
+
+
+Please see `SerialReadTask.h` for further details.
 
 The ESP32 supports three input types.
 
