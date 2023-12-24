@@ -396,7 +396,6 @@ void CommandPublisher::parse_and_publish(const unsigned char * raw_command) {
         break;
 
       case END_OF_COMMAND:
-        Serial.println("Valid command.");
         break;
 
       case ERROR:
@@ -411,11 +410,10 @@ void CommandPublisher::parse_and_publish(const unsigned char * raw_command) {
         break;
     }
   }
-  //	print_command_to_publish(command_to_publish);
   state = TEXT;
   number_of_characters = 0;
   command_to_publish.p_text = text_to_publish;
-  // command_to_publish.text_length is already set.
+
   command_to_publish.command =
     0 <= command_index
     && command_index < NUMBER_OF_COMMANDS
@@ -430,7 +428,6 @@ void CommandPublisher::parse_and_publish(const unsigned char * raw_command) {
   command_to_publish.background.green = background_green;
   command_to_publish.background.blue = background_blue;
   xQueueSendToBack(h_command_queue, &command_to_publish, pdMS_TO_TICKS(25));
-  Serial.println("Command sent");
 }
 
 void CommandPublisher::publish_error() {
