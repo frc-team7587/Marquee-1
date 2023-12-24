@@ -20,6 +20,7 @@
 #include <Arduino.h>
 #include "FastLED.h"
 #include "Panel.h"
+#include "TypeFace.h"
 
 class Marquee {
 
@@ -70,6 +71,36 @@ public:
   size_t led_count() {
     return panel.led_count();
   }
+
+  /**
+   * Places a character or a part thereof on this Marquee. The first pixel
+   * will be placed at (row, column), with increasing columns placed to the
+   * right. Display as much of the character that fits on the screen.
+   *
+   * Parameters:
+   * ----------
+   *
+   * Name              Contents
+   * -------------     --------------------------------------------------------
+   * start_char_column The first character column to display. If 0, attempt
+   *                   to display the entire character.
+   * row               Row to contain the character's bottom left pixel
+   * column            Column to contain the characters bottom left pixel
+   * char_to_place     The character to place. Must be printable
+   * type_face         Type face that specifies the pixels to set for all
+   *                   available characters
+   *
+   * Returns: the column **after** the last column that occupied by the
+   *          placed characters. Note that the next available column might
+   *          lie outside the marquee.
+   */
+  uint16_t place_char(
+      const CRGB *color,
+      uint16_t start_char_column,
+      uint16_t row,
+      uint16_t column,
+      char char_to_place,
+      const TypeFace &type_face);
 
   /**
    * Sets a ripple pattern beginning at the specified offset in the ripple

@@ -110,6 +110,41 @@ void Marquee::flood(const CRGB *color) {
   }
 }
 
+uint16_t Marquee::place_char(
+    const CRGB *color,
+    uint16_t start_char_column,
+    uint16_t row,
+    uint16_t column,
+    char char_to_place,
+    const TypeFace &type_face) {
+  const uint16_t columns_in_panel = columns();
+  const uint16_t rows_in_panel = rows();
+
+  const uint16_t columns_in_char = type_face.char_width();
+  const uint16_t rows_in_char = type_face.char_height();
+
+  const uint16_t max_columns_to_place = columns_in_char - start_char_column;
+
+  const uint16_t actual_columns_to_place =
+      (max_columns_to_place + column) < columns_in_panel
+      ? max_columns_to_place
+      : columns_in_panel - column;
+
+  const uint16_t actual_rows_to_place =
+      row + rows_in_char < rows_in_panel
+          ? rows_in_char
+          : rows_in_panel - row;
+
+  for (uint16_t character_column = 0; character_column < actual_columns_to_place; ++character_column) {
+    for (uint16_t character_row = 0; character_row < actual_rows_to_place; ++character_row) {
+      if (type_face.char_bit_at(char_to_place, character_row, character_column + start_char_column)) {
+        set_pixel(character_row + row, character_column + column, color);
+      }
+    }
+  }
+  return column + actual_columns_to_place;
+}
+
 uint16_t Marquee::ripple(uint16_t offset) {
   int max_row = rows();
   int max_column = columns();

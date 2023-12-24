@@ -25,19 +25,23 @@ BaseType_t StaticTextDriver::begin(const DisplayMessage &displayMessage,
 
   const unsigned char *p_text = displayMessage.p_text;
   size_t text_length = displayMessage.text_length;
-  uint16_t columns_in_string = type_face.char_width() * text_length;
-  uint16_t columns_in_marquee = marquee->columns();
-  uint16_t columns_to_display =
-      columns_in_string < columns_in_marquee ?
-          columns_in_string : columns_in_marquee;
-  uint16_t rows = type_face.char_height();
-  for (uint16_t column = 0; column < columns_to_display; ++column) {
-    for (uint16_t row = 0; row < rows; ++row) {
-      if (type_face.bit_at(p_text, text_length, row, column)) {
-        marquee->set_pixel(row, column, &foreground);
-      }
-    }
+  size_t chars_in_display = marquee->columns() / type_face.char_width();
+  if (chars_in_display < text_length) {
+    text_length = chars_in_display;
   }
+  uint16_t rows = type_face.char_height();
+  size_t display_column = 0;
+
+  for (size_t char_index = 0; char_index < text_length; ++char_index) {
+    display_column = marquee->place_char(
+        &foreground,
+        0,
+        0,
+        display_column,
+        *(p_text++),
+        type_face);
+  }
+
   marquee->show();
   return xQueuePeek(h_queue, &display_message, pdMS_TO_TICKS(10000));
 }
