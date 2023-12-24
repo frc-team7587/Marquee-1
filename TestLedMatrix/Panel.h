@@ -44,11 +44,6 @@ public:
 	virtual int columns() const = 0;
 
 	/**
-	 * Returns the offset of the specified column in the LED array.
-	 */
-	virtual int16_t column_offset(int column) const = 0;
-
-	/**
 	 * Returns the number of LEDs in the panel.
 	 */
 	virtual int led_count() const = 0;

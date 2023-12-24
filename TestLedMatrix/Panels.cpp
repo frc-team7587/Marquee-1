@@ -7,8 +7,10 @@
 
 #include "Panels.h"
 #include <Arduino.h>
-#include "freertos/FreeRTOS.h"
-#include "freertos/task.h"
+
+#define COLUMN_COUNT 32
+#define ROW_COUNT 8
+#define NUMBER_OF_LEDS (COLUMN_COUNT * ROW_COUNT)
 
 /**
  * An 8 row by 32 column panel where row 0 of even columns is at the bottom
@@ -33,51 +35,45 @@
  *
  *
  */
-class EightByThirtyTwoAlternating : public Panel {
-	static const int number_of_leds = 8 * 32;
-	static const int column_count = 32;
+class EightByThirtyTwoAlternating: public Panel {
+//  static const int number_of_leds = 8 * 32;
+//  static const int column_count = 32;
 
-	int16_t column_offsets[32];
+  int16_t column_offsets[32];
 
 public:
-	EightByThirtyTwoAlternating() {
-		int16_t last = number_of_leds;
-		for (int i = 0; i < 32; ++i) {
-			last -= ((i & 1)
-				? 15
-				: 1);
-			column_offsets[i] = last;
-		}
-	}
+  EightByThirtyTwoAlternating() {
+    int16_t last = NUMBER_OF_LEDS;
+    for (int i = 0; i < 32; ++i) {
+      last -= ((i & 1) ? 15 : 1);
+      column_offsets[i] = last;
+    }
+  }
 
-	virtual int columns() const {
-		return column_count;
-	}
+  virtual int columns() const {
+    return COLUMN_COUNT;
+  }
 
-	virtual int16_t column_offset(int column) const {
-		return (column / column_count) + column_offsets[column % column_count];
-	}
+  virtual int led_count() const {
+    return NUMBER_OF_LEDS;
+  }
 
-	virtual int led_count() const {
-		return number_of_leds;
-	}
+  virtual int index(int row, int column, int panel_no) const {
+    if (!(column & 1)) {
+      row = -row;
+    }
+    int16_t offset = column_offsets[column] + row;
+    int led_offset = NUMBER_OF_LEDS * panel_no + offset;
+    return led_offset;
+  }
 
-	virtual int index(int row, int column, int panel_no) const {
-		if (!(column & 1)) {
-			row = -row;
-		}
-		int16_t offset = column_offsets[column] + row;
-		int led_offset = number_of_leds * panel_no + offset;
-		return led_offset;
-	}
-
-	virtual int rows() const {
-		return 8;
-	}
+  virtual int rows() const {
+    return ROW_COUNT;
+  }
 };
 
 static EightByThirtyTwoAlternating eight_by_thirty_to_alternating;
 
 const Panel* Panels::alternatingEightByThirtyTwo() {
-	return &eight_by_thirty_to_alternating;
+  return &eight_by_thirty_to_alternating;
 }
