@@ -16,24 +16,19 @@
 #include "DisplayDriver.h"
 #include "TypeFace.h"
 
-class StaticTextDriver : public DisplayDriver {
+class StaticTextDriver: public DisplayDriver {
 public:
-	StaticTextDriver(const TypeFace& type_face);
-	virtual ~StaticTextDriver();
+  StaticTextDriver(const TypeFace &type_face);
+  virtual ~StaticTextDriver();
 
+  virtual BaseType_t begin(const DisplayMessage &displayMessage,
+      Marquee *marquee, QueueHandle_t h_queue);
 
-	virtual BaseType_t begin(
-		const DisplayMessage& displayMessage,
-		Marquee *marquee,
-		QueueHandle_t h_queue);
-
-	virtual BaseType_t refresh(
-		const DisplayMessage& displayMessage,
-		Marquee *marquee,
-		QueueHandle_t h_queue);
+  virtual BaseType_t refresh(const DisplayMessage &displayMessage,
+      Marquee *marquee, QueueHandle_t h_queue);
 
 private:
-	const TypeFace& type_face;
+  const TypeFace &type_face;
 };
 
 #endif /* STATICTEXTDRIVER_H_ */
