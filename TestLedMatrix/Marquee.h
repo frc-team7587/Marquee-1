@@ -40,11 +40,7 @@ public:
    *                     physical display geometry.
    *
    */
-  Marquee(CRGB *leds, size_t num_leds, const Panel& panel) :
-    leds(leds),
-    num_leds(num_leds),
-    panel(panel) {
-  }
+  Marquee(CRGB *leds, size_t num_leds, const Panel& panel);
 
   /**
    * Sets a single array to a specified color.
@@ -74,6 +70,23 @@ public:
   size_t led_count() {
     return panel.led_count();
   }
+
+  /**
+   * Sets a ripple pattern beginning at the specified offset in the ripple
+   * table. To avoid overflow, the offset is normalized (i.e. set to its value
+   * modulo the ripple table length).
+   *
+   * Parameters:
+   * ----------
+   *
+   *   Name    Contents
+   *   ------- ---------------------------------------------------------------
+   *   offset  The offset into the pattern that appears in display column
+   *           0. Start at 0, please
+   *
+   * Returns: the offset to pass to the next invocation.
+   */
+  uint16_t ripple(uint16_t offset);
 
   /**
    * Returns the number of rows in the display
