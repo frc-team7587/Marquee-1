@@ -14,20 +14,19 @@
 
 #include "TypeFace.h"
 
-class TypeFace6x8 : public TypeFace {
+class TypeFace6x8: public TypeFace {
 public:
-	TypeFace6x8();
-	virtual ~TypeFace6x8();
+  TypeFace6x8();
+  virtual ~TypeFace6x8();
 
+  virtual int16_t char_height() const;
+  virtual int16_t char_width() const;
 
-	virtual int16_t char_height() const;
-	virtual int16_t char_width() const;
-
-	virtual bool bit_at(
-			const unsigned char *p_text,
-			size_t text_length,
-			int row,
-			int column) const;
+  virtual bool bit_at(
+      const unsigned char *p_text,
+      size_t text_length,
+      int row,
+      int column) const;
 
 };
 
