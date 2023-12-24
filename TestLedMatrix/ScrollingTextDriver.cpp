@@ -55,20 +55,20 @@ BaseType_t ScrollingTextDriver::write_text(
 
   const unsigned char *p_text = displayMessage.p_text;
   size_t text_length = displayMessage.text_length;
-  int columns_in_string = type_face.char_width() * text_length;
-  int columns_in_marquee = marquee->columns();
-  int delay_in_ticks = column_shift
+  uint16_t columns_in_string = type_face.char_width() * text_length;
+  uint16_t columns_in_marquee = marquee->columns();
+  uint16_t delay_in_ticks = column_shift
       ? interframe_delay
       : initial_delay;
-  int rows = type_face.char_height();
-  int available_columns = columns_in_string - column_shift;
-  int columns_to_display =
+  uint16_t rows = type_face.char_height();
+  uint16_t available_columns = columns_in_string - column_shift;
+  uint16_t columns_to_display =
       available_columns < columns_in_marquee
       ? available_columns
       : columns_in_marquee;
 
-  for (int column = 0; column < columns_to_display; column++) {
-    for (int row = 0; row < rows; row++) {
+  for (uint16_t column = 0; column < columns_to_display; column++) {
+    for (uint16_t row = 0; row < rows; row++) {
       if (type_face.bit_at(p_text, text_length, row, column + column_shift)) {
         marquee->set_pixel(row, column, &foreground);
       }

@@ -25,14 +25,14 @@ BaseType_t StaticTextDriver::begin(const DisplayMessage &displayMessage,
 
   const unsigned char *p_text = displayMessage.p_text;
   size_t text_length = displayMessage.text_length;
-  int columns_in_string = type_face.char_width() * text_length;
-  int columns_in_marquee = marquee->columns();
-  int columns_to_display =
+  uint16_t columns_in_string = type_face.char_width() * text_length;
+  uint16_t columns_in_marquee = marquee->columns();
+  uint16_t columns_to_display =
       columns_in_string < columns_in_marquee ?
           columns_in_string : columns_in_marquee;
-  int rows = type_face.char_height();
-  for (int column = 0; column < columns_to_display; ++column) {
-    for (int row = 0; row < rows; ++row) {
+  uint16_t rows = type_face.char_height();
+  for (uint16_t column = 0; column < columns_to_display; ++column) {
+    for (uint16_t row = 0; row < rows; ++row) {
       if (type_face.bit_at(p_text, text_length, row, column)) {
         marquee->set_pixel(row, column, &foreground);
       }

@@ -25,9 +25,13 @@ public:
   virtual bool bit_at(
       const unsigned char *p_text,
       size_t text_length,
-      int row,
-      int column) const;
+      uint16_t row,
+      uint16_t column) const;
 
+  virtual bool char_bit_at(
+      unsigned char text_char,
+      uint16_t row,
+      uint16_t column) const;
 };
 
 #endif /* TYPEFACE6X8_H_ */
