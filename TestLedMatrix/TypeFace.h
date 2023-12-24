@@ -14,17 +14,14 @@
 
 class TypeFace {
 public:
-	TypeFace();
-	virtual ~TypeFace();
+  TypeFace();
+  virtual ~TypeFace();
 
-	virtual int16_t char_height() const = 0;
-	virtual int16_t char_width() const = 0;
+  virtual int16_t char_height() const = 0;
+  virtual int16_t char_width() const = 0;
 
-	virtual bool bit_at(
-			const unsigned char *p_text,
-			size_t text_length,
-			int row,
-			int column) const = 0;
+  virtual bool bit_at(const unsigned char *p_text, size_t text_length, int row,
+      int column) const = 0;
 
 };
 
