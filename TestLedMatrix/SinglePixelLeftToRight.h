@@ -18,32 +18,30 @@
 #include "DisplayDriver.h"
 #include "FastLED.h"
 
-class SinglePixelLeftToRight : public DisplayDriver {
+class SinglePixelLeftToRight: public DisplayDriver {
 public:
-	SinglePixelLeftToRight();
+  SinglePixelLeftToRight();
 
-	virtual ~SinglePixelLeftToRight();
+  virtual ~SinglePixelLeftToRight();
 
-	virtual BaseType_t begin(
-		const DisplayMessage& displayMessage,
-		Marquee *marquee,
-		QueueHandle_t h_queue);
+  virtual BaseType_t begin(
+      const DisplayMessage &displayMessage,
+      Marquee *marquee,
+      QueueHandle_t h_queue);
 
-	virtual BaseType_t refresh(
-		const DisplayMessage& displayMessage,
-		Marquee *marquee,
-		QueueHandle_t h_queue);
+  virtual BaseType_t refresh(const DisplayMessage &displayMessage,
+      Marquee *marquee,
+      QueueHandle_t h_queue);
 
 private:
 
-	BaseType_t write_pixel(
-		Marquee *marquee,
-		QueueHandle_t h_queue);
-
-	int8_t color_index;
-	CRGB current_color;
-	int16_t row;
-	int16_t column;
+  BaseType_t write_pixel(
+      Marquee *marquee,
+      QueueHandle_t h_queue);
+  int8_t color_index;
+  CRGB current_color;
+  int16_t row;
+  int16_t column;
 };
 
 #endif /* SINGLEPIXELLEFTTORIGHT_H_ */
