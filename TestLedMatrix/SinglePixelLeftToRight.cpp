@@ -20,12 +20,12 @@ SinglePixelLeftToRight::~SinglePixelLeftToRight() {
 }
 
 BaseType_t SinglePixelLeftToRight::begin(
-    const DisplayMessage &displayMessage,
+    const DisplayMessage &display_message,
     Marquee *marquee,
     QueueHandle_t h_queue) {
   row = 0;
   column = 0;
-  current_color = CRGB::Red;
+  current_color = display_message.foreground;
   return write_pixel(marquee, h_queue);
 }
 
