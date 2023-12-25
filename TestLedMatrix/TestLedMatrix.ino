@@ -124,7 +124,7 @@ void setup() {
   left_to_right_message.command = DisplayCommand::SINGLE_PIXEL_LEFT_TO_RIGHT;
   left_to_right_message.delay1 = 0;
   left_to_right_message.delay2 = 0;
-  left_to_right_message.foreground = CRGB::Black;
+  left_to_right_message.foreground = CRGB::Red;
   left_to_right_message.background = CRGB::Black;
   xQueueSendToBack(
     h_command_queue, &left_to_right_message, pdMS_TO_TICKS(1));
