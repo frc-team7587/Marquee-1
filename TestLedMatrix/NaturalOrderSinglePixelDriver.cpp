@@ -15,12 +15,12 @@ NaturalOrderSinglePixelDriver::~NaturalOrderSinglePixelDriver() {
 }
 
 BaseType_t NaturalOrderSinglePixelDriver::begin(
-    const DisplayMessage& displayMessage,
+    const DisplayMessage& display_message,
     Marquee *marquee,
     QueueHandle_t h_queue) {
   color_index = 0;
   pixel_index = 0;
-  current_color = CRGB::Red;
+  current_color = display_message.foreground;
   Serial.print("LED count: ");
   Serial.println(marquee->led_count());
   return set_led(marquee, h_queue);
