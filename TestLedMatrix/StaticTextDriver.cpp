@@ -23,24 +23,21 @@ BaseType_t StaticTextDriver::begin(const DisplayMessage &displayMessage,
 
   marquee->flood(&background);
 
-  const unsigned char *p_text = displayMessage.p_text;
+  const unsigned char *text = displayMessage.p_text;
   size_t text_length = displayMessage.text_length;
-  size_t chars_in_display = marquee->columns() / type_face.char_width();
-  if (chars_in_display < text_length) {
-    text_length = chars_in_display;
+  uint16_t characters_to_display = marquee->columns() / type_face.char_width();
+  if (characters_to_display < text_length) {
+    characters_to_display = text_length;
   }
-  uint16_t rows = type_face.char_height();
-  size_t display_column = 0;
-
-  for (size_t char_index = 0; char_index < text_length; ++char_index) {
-    display_column = marquee->place_char(
-        &foreground,
-        0,
-        0,
-        display_column,
-        *(p_text++),
-        type_face);
-  }
+  marquee->place_string(
+      &foreground,
+      text,
+      text_length,
+      0,
+      characters_to_display * type_face.char_width(),
+      0,
+      0,
+      type_face);
 
   marquee->show();
   return xQueuePeek(h_queue, &display_message, pdMS_TO_TICKS(10000));

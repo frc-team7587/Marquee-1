@@ -89,7 +89,18 @@ static const CRGB RIPPLE_TABLE[] = {
 
 #define RIPPLE_TABLE_LENGTH (sizeof(RIPPLE_TABLE) / sizeof(RIPPLE_TABLE[0]))
 
-Marquee::  Marquee(CRGB *leds, size_t num_leds, const Panel& panel) :
+bool Marquee::pixel_state_from_string(
+    const unsigned char *text,
+    uint16_t row,
+    uint16_t column,
+    const TypeFace &typeface) {
+  uint16_t character_width = typeface.char_width();
+  uint16_t character_index = column / character_width;
+  uint16_t pixel_offset = column % character_width;
+  return typeface.char_bit_at(text[character_index], row, pixel_offset);
+}
+
+Marquee::Marquee(CRGB *leds, size_t num_leds, const Panel& panel) :
     leds(leds),
     num_leds(num_leds),
     panel(panel) {
@@ -110,39 +121,53 @@ void Marquee::flood(const CRGB *color) {
   }
 }
 
-uint16_t Marquee::place_char(
+void Marquee::place_string(
     const CRGB *color,
-    uint16_t start_char_column,
+    const unsigned char *text,
+    size_t text_length,
+    uint16_t start_text_column,
+    uint16_t number_of_columns,
     uint16_t row,
     uint16_t column,
-    char char_to_place,
-    const TypeFace &type_face) {
-  const uint16_t columns_in_panel = columns();
-  const uint16_t rows_in_panel = rows();
+    const TypeFace &typeface) {
+  const uint16_t character_height = typeface.char_height();
+  const uint16_t character_width = typeface.char_width();
 
-  const uint16_t columns_in_char = type_face.char_width();
-  const uint16_t rows_in_char = type_face.char_height();
+  uint16_t max_panel_row = row + character_height;
+  if (panel.rows() < max_panel_row) {
+    max_panel_row = panel.rows();
+  }
 
-  const uint16_t max_columns_to_place = columns_in_char - start_char_column;
+  uint16_t max_panel_column = start_text_column + number_of_columns;
+  if (panel.columns() < max_panel_column) {
+    max_panel_column = panel.columns();
+  }
+  const uint16_t text_length_in_columns = text_length * character_width;
+  const uint16_t max_text_column = column + text_length_in_columns;
+  if (max_text_column < max_panel_column) {
+    max_panel_column = max_text_column;
+  }
 
-  const uint16_t actual_columns_to_place =
-      (max_columns_to_place + column) < columns_in_panel
-      ? max_columns_to_place
-      : columns_in_panel - column;
-
-  const uint16_t actual_rows_to_place =
-      row + rows_in_char < rows_in_panel
-          ? rows_in_char
-          : rows_in_panel - row;
-
-  for (uint16_t character_column = 0; character_column < actual_columns_to_place; ++character_column) {
-    for (uint16_t character_row = 0; character_row < actual_rows_to_place; ++character_row) {
-      if (type_face.char_bit_at(char_to_place, character_row, character_column + start_char_column)) {
-        set_pixel(character_row + row, character_column + column, color);
+  uint16_t current_text_column = start_text_column;
+  for (
+      uint16_t current_panel_column = column;
+      current_panel_column < max_panel_column;
+      ++current_panel_column) {
+    uint16_t current_text_row = 0;
+    for (
+        uint16_t current_panel_row = row;
+        current_panel_row < max_panel_row;
+        ++current_panel_row) {
+      if (pixel_state_from_string(
+          text,
+          current_text_row++,
+          current_text_column,
+          typeface)) {
+        set_pixel(current_panel_row, current_panel_column, color);
       }
     }
+    ++current_text_column;
   }
-  return column + actual_columns_to_place;
 }
 
 uint16_t Marquee::ripple(uint16_t offset) {

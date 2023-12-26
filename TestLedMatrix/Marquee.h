@@ -24,6 +24,29 @@
 
 class Marquee {
 
+  /**
+   * Returns the state of a pixel at a given (row, column) relative to the
+   * start of text (i.e. unsigned char array). (0, 0) represents the pixel
+   * at the lower left of the first character in the string, with rows
+   * increasing upward and columns increasing to the right.
+   *
+   * Parameters:
+   *
+   * Name     Contents
+   * ------   -------------------------------------------------------------------
+   * text     The text to be displayed on the panel
+   * row      The row to examine as defined above. This value is not checked,
+   *          so it must be valid.
+   * column   The column to examine as defined above. This value is not checked,
+   *          so it must be valid.
+   * typeface The type face that translates characters to pixels.
+   */
+  bool pixel_state_from_string(
+      const unsigned char *text,
+      uint16_t row,
+      uint16_t column,
+      const TypeFace &typeface);
+
 public:
 
   /**
@@ -73,34 +96,32 @@ public:
   }
 
   /**
-   * Places a character or a part thereof on this Marquee. The first pixel
-   * will be placed at (row, column), with increasing columns placed to the
-   * right. Display as much of the character that fits on the screen.
+   * Place text on the panel starting at the specified row and column.
+   * Display all the available text that fits on the panel.
    *
    * Parameters:
    * ----------
    *
-   * Name              Contents
-   * -------------     --------------------------------------------------------
-   * start_char_column The first character column to display. If 0, attempt
-   *                   to display the entire character.
-   * row               Row to contain the character's bottom left pixel
-   * column            Column to contain the characters bottom left pixel
-   * char_to_place     The character to place. Must be printable
-   * type_face         Type face that specifies the pixels to set for all
-   *                   available characters
-   *
-   * Returns: the column **after** the last column that occupied by the
-   *          placed characters. Note that the next available column might
-   *          lie outside the marquee.
+   * Name        Contents
+   * ----------- ------------------------------------------------------------
+   * color       The text color
+   * text        The text to display
+   * text_length The number of characters in the text. Length is specified in
+   *             characters rather than pixels because character width depends
+   *             on the prevailing typeface.
+   * row         Starting row of the displayed text
+   * column      Starting column of the displayed text
+   * typeface    Typeface -- pixels that comprise characters
    */
-  uint16_t place_char(
+  void place_string(
       const CRGB *color,
-      uint16_t start_char_column,
+      const unsigned char *text,
+      size_t text_length,
+      uint16_t start_text_column,
+      uint16_t number_of_columns,
       uint16_t row,
       uint16_t column,
-      char char_to_place,
-      const TypeFace &type_face);
+      const TypeFace &typeface);
 
   /**
    * Sets a ripple pattern beginning at the specified offset in the ripple
