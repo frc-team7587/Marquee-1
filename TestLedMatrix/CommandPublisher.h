@@ -13,12 +13,13 @@
 
 #include "Arduino.h"
 
+#include "DisplayMessage.h"
+#include "DisplayCommand.h"
+
 #include "stdlib.h"
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
-
-#include "DisplayMessage.h"
 
 #define MAX_TEXT_LENGTH 128
 

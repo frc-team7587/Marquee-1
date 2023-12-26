@@ -11,20 +11,6 @@
 #include "CommandPublisher.h"
 #include <stdlib.h>
 
-/**
- * TODO (emintz): move to DisplayCommand.h or DisplayCommand.cpp or both.
- */
-static const DisplayCommand command_table[] = {
-  ERROR,
-  FILL_WITH_COLOR,
-  FLASH_TWO_COLORS,
-  RIPPLING_RAINBOW,
-  SINGLE_PIXEL_NATURAL_ORDER,
-  SINGLE_PIXEL_LEFT_TO_RIGHT,
-  STATIC_TEXT,
-  SCROLLING_TEXT,
-};
-
 enum CharacterType {
   TEXT,     // Valid non-numeric character
   DIGIT,    // Decimal digit, '0' .. '9';
@@ -418,11 +404,7 @@ void CommandPublisher::parse_and_publish(const unsigned char * raw_command) {
   number_of_characters = 0;
   command_to_publish.p_text = text_to_publish;
 
-  command_to_publish.command =
-    0 <= command_index
-    && command_index < NUMBER_OF_COMMANDS
-      ? command_table[command_index]
-      : command_table[0];
+  command_to_publish.command = DisplayCommandLookup::from_index(command_index);
   command_to_publish.delay1 = delay_1;
   command_to_publish.delay2 = delay_2;
   command_to_publish.foreground.red = foreground_red;
