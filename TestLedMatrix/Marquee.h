@@ -102,16 +102,20 @@ public:
    * Parameters:
    * ----------
    *
-   * Name        Contents
-   * ----------- ------------------------------------------------------------
-   * color       The text color
-   * text        The text to display
-   * text_length The number of characters in the text. Length is specified in
-   *             characters rather than pixels because character width depends
-   *             on the prevailing typeface.
-   * row         Starting row of the displayed text
-   * column      Starting column of the displayed text
-   * typeface    Typeface -- pixels that comprise characters
+   * Name              Contents
+   * -----------       -------------------------------------------------------
+   * color             The text color
+   * text              The text to display
+   * text_length       The number of characters in the text. Length is
+   *                   specified in characters. It cannot be specified in pixels
+   *                   because character width depends
+   *                   on the prevailing typeface.
+   * start_text_column First column of text to display. Column 0 is the
+   *                   zeroth column of the zeroth character in the sequence
+   * number_of_columns Number of columns to display
+   * row               Starting row of the displayed text
+   * column            Starting column of the displayed text
+   * typeface          Typeface -- pixels that comprise characters
    */
   void place_string(
       const CRGB *color,

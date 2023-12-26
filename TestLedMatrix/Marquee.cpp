@@ -138,7 +138,7 @@ void Marquee::place_string(
     max_panel_row = panel.rows();
   }
 
-  uint16_t max_panel_column = start_text_column + number_of_columns;
+  uint16_t max_panel_column = column + number_of_columns;
   if (panel.columns() < max_panel_column) {
     max_panel_column = panel.columns();
   }
@@ -187,7 +187,15 @@ uint16_t Marquee::ripple(uint16_t offset) {
 
 void Marquee::set_pixel(int row, int column, const CRGB *color) {
   int index = panel.index(row, column);
+  if (0 <= index && index < panel.led_count()) {
   set_pixel(index, color);
+  } else {
+    Serial.printf("Pixel (%d, %d) index %d is out of bounds.\n",
+        row,
+        column,
+        index);
+    Serial.flush();
+  }
 }
 
 void Marquee::show() {
