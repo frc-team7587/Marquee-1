@@ -50,7 +50,6 @@ static DisplayManager display_manager(&drivers, &marquee);
 
 static CommandPublisher command_publisher;
 static I2CCommandHandler i2c_command_handler(&command_publisher);
-// static I2CReceiveTask i2c_receive_task(&command_publisher);
 static SPIReceiveTask spi_receive_task(
     &command_publisher,
     MAX_SPI_MESSAGE,
@@ -101,7 +100,7 @@ void setup() {
   xTaskCreate(
     start_display_manager,
     "Display manager",
-    1024,
+    4096,
     NULL,
     2,
     &h_display_manager);
