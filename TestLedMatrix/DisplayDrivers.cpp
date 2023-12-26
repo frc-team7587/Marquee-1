@@ -31,20 +31,22 @@
 #include "DisplayCommand.h"
 #include "DisplayFillDriver.h"
 #include "ErrorDisplayDriver.h"
-#include "TypeFace6x8.h"
+#include "RippleDriver.h"
 #include "StaticTextDriver.h"
 #include "SinglePixelLeftToRight.h"
 #include "ScrollingTextDriver.h"
+#include "TypeFace6x8.h"
 
 TypeFace6x8 type_face;
 
 
-DisplayFillDriver display_fill;
-ErrorDisplayDriver error_display;
-NaturalOrderSinglePixelDriver natural_order_single_pixel;
-StaticTextDriver static_text(type_face);
-SinglePixelLeftToRight single_pixel_left_to_right;
-ScrollingTextDriver scrolling_text(type_face);
+static DisplayFillDriver display_fill;
+static ErrorDisplayDriver error_display;
+static NaturalOrderSinglePixelDriver natural_order_single_pixel;
+static RippleDriver ripple_driver;
+static StaticTextDriver static_text(type_face);
+static SinglePixelLeftToRight single_pixel_left_to_right;
+static ScrollingTextDriver scrolling_text(type_face);
 
 
 DisplayDrivers::DisplayDrivers() {
@@ -55,14 +57,20 @@ DisplayDrivers::~DisplayDrivers() {
 
 DisplayDriver * DisplayDrivers::of_type(DisplayCommand driver_type) {
   DisplayDriver *result = NULL;
+  int driver_command = driver_type;
+  Serial.print("Display command: ");
+  Serial.println(driver_command);
   switch(driver_type) {
     default:
     case ERROR:
-      result = &error_display;
+      result = &ripple_driver;
       break;
-    case FLASH_TWO_COLORS:  // TODO
     case FILL_WITH_COLOR:
+    case FLASH_TWO_COLORS:  // TODO
       result = &display_fill;
+      break;
+    case RIPPLING_RAINBOW:
+      result = &ripple_driver;
       break;
     case SINGLE_PIXEL_NATURAL_ORDER:
       result = &natural_order_single_pixel;

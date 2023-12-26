@@ -11,14 +11,18 @@
 #include "CommandPublisher.h"
 #include <stdlib.h>
 
+/**
+ * TODO (emintz): move to DisplayCommand.h or DisplayCommand.cpp or both.
+ */
 static const DisplayCommand command_table[] = {
   ERROR,
   FILL_WITH_COLOR,
   FLASH_TWO_COLORS,
+  RIPPLING_RAINBOW,
   SINGLE_PIXEL_NATURAL_ORDER,
   SINGLE_PIXEL_LEFT_TO_RIGHT,
   STATIC_TEXT,
-  SCROLLING_TEXT
+  SCROLLING_TEXT,
 };
 
 enum CharacterType {
