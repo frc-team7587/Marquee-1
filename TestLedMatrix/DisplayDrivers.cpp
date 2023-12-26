@@ -35,6 +35,7 @@
 #include "StaticTextDriver.h"
 #include "SinglePixelLeftToRight.h"
 #include "ScrollingTextDriver.h"
+#include "TextCrawlDriver.h"
 #include "TypeFace6x8.h"
 
 TypeFace6x8 type_face;
@@ -47,7 +48,7 @@ static RippleDriver ripple_driver;
 static StaticTextDriver static_text(type_face);
 static SinglePixelLeftToRight single_pixel_left_to_right;
 static ScrollingTextDriver scrolling_text(type_face);
-
+static TextCrawlDriver text_crawl_driver(type_face);
 
 DisplayDrivers::DisplayDrivers() {
 }
@@ -80,8 +81,11 @@ DisplayDriver * DisplayDrivers::of_type(DisplayCommand driver_type) {
       result = &static_text;
       break;
     case SCROLLING_TEXT:
-        result = &scrolling_text;
-        break;
+      result = &scrolling_text;
+      break;
+    case TEXT_CRAWL:
+      result = &text_crawl_driver;
+      break;
   }
 
   return result;

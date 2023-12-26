@@ -16,6 +16,7 @@ static DisplayCommand COMMAND_TABLE[] = {
   SINGLE_PIXEL_LEFT_TO_RIGHT,
   STATIC_TEXT,
   SCROLLING_TEXT,
+  TEXT_CRAWL,
 };
 
 DisplayCommand DisplayCommandLookup::from_index(uint16_t index) {
