@@ -21,8 +21,6 @@ BaseType_t NaturalOrderSinglePixelDriver::begin(
   color_index = 0;
   pixel_index = 0;
   current_color = display_message.foreground;
-  Serial.print("LED count: ");
-  Serial.println(marquee->led_count());
   return set_led(marquee, h_queue);
 }
 

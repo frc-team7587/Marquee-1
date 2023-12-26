@@ -58,8 +58,6 @@ DisplayDrivers::~DisplayDrivers() {
 DisplayDriver * DisplayDrivers::of_type(DisplayCommand driver_type) {
   DisplayDriver *result = NULL;
   int driver_command = driver_type;
-  Serial.print("Display command: ");
-  Serial.println(driver_command);
   switch(driver_type) {
     default:
     case ERROR:
