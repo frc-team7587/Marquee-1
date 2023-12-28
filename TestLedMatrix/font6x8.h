@@ -799,7 +799,7 @@ const uint8_t fontdata[][FONT_WIDTH] = {
        0b10000010,
        0b10000010,
        0b10000010,
-       0b11111111,
+       0b11111110,
        0b00000000,  // Interchar space
     },
 
