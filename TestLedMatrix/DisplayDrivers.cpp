@@ -42,7 +42,7 @@ TypeFace6x8 type_face;
 
 
 static DisplayFillDriver display_fill;
-static ErrorDisplayDriver error_display;
+static ErrorDisplayDriver error_display(type_face);
 static NaturalOrderSinglePixelDriver natural_order_single_pixel;
 static RippleDriver ripple_driver;
 static StaticTextDriver static_text(type_face);
@@ -62,7 +62,7 @@ DisplayDriver * DisplayDrivers::of_type(DisplayCommand driver_type) {
   switch(driver_type) {
     default:
     case ERROR:
-      result = &ripple_driver;
+      result = &error_display;
       break;
     case FILL_WITH_COLOR:
     case FLASH_TWO_COLORS:  // TODO

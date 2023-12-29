@@ -15,10 +15,14 @@
 #include "DisplayMessage.h"
 #include "Marquee.h"
 #include "DisplayDriver.h"
+#include "TypeFace.h"
 
 class ErrorDisplayDriver : public DisplayDriver {
+  const TypeFace& type_face;
+  uint16_t rainbow_offset;
+
 public:
-  ErrorDisplayDriver();
+  ErrorDisplayDriver(TypeFace& type_face);
   virtual ~ErrorDisplayDriver();
 
   virtual BaseType_t begin(
