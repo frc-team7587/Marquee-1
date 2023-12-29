@@ -25,18 +25,23 @@ BaseType_t StaticTextDriver::begin(const DisplayMessage &displayMessage,
 
   const unsigned char *text = displayMessage.p_text;
   size_t text_length = displayMessage.text_length;
-  uint16_t characters_to_display = marquee->columns() / type_face.char_width();
-  if (characters_to_display < text_length) {
+  uint16_t columns_in_display = marquee->columns();
+  uint16_t characters_to_display = columns_in_display / type_face.char_width();
+  if (text_length < characters_to_display) {
     characters_to_display = text_length;
   }
+  uint16_t columns_to_display = characters_to_display * type_face.char_width();
+  Serial.printf("Columns in display: %u, columns to display: %u.\n",
+      columns_in_display, columns_to_display);
+  uint16_t starting_column = (columns_in_display - columns_to_display) / 2;
   marquee->place_string(
       &foreground,
       text,
       text_length,
       0,
-      characters_to_display * type_face.char_width(),
+      columns_to_display,
       0,
-      0,
+      starting_column,
       type_face);
 
   marquee->show();
