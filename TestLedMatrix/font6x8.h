@@ -21,7 +21,7 @@
 
 #define ASCII_OFFSET (0x20)     // ASCII code of 1st char in font array
 
-#define ASCII_NONPRINT (0x80)   // ASCII code of char to show for chars not included in the font (could also be a space)
+#define ASCII_NONPRINT (0x81)   // ASCII code of char to show for chars not included in the font (could also be a space)
 
 #define FONT_WIDTH 6
 
@@ -802,7 +802,14 @@ const uint8_t fontdata[][FONT_WIDTH] = {
        0b11111110,
        0b00000000,  // Interchar space
     },
-
+    { // ASCII 0x81 (Error Box)
+       0b01111110,
+       0b01000010,
+       0b01000010,
+       0b01000010,
+       0b01000010,
+       0b01111110,
+    },
 };
 
 #endif /* FONT6X8_H_ */
