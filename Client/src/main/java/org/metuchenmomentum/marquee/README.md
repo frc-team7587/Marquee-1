@@ -102,4 +102,29 @@ implementation that sends messages over
 [SPI](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface).
 The channel is (i.e. slave select pin) is set at construction.
 
-  
+###`UsbDisplayConnection`
+
+The `UsbDisplayConnection` class is a 
+[`DisplayConnection`](#displayconnection) 
+implementation that sends commands over a USB serial connection,
+a USB connection that emulates a asycronous serial terminal,
+a.k.a. a serial port. 
+
+### `UsbSerialDeviceList`
+
+The `UsbSerialDeviceList` finds all serial USB devices, file
+paths of the form `/dev/ttyUSBn`, where `n` is 0, 1, or 2.
+
+### `UsbSerialPortBuilder`
+
+The builds `SerialPort` instances that connect to
+USB serial devices which are file
+paths of the form `/dev/ttyUSBn`, where `n` is 0, 1, or 2. Note that
+the `SerialPort` class is provided by the WPI library. 
+
+### VacuousDisplayConnection
+
+The `VacuousDisplayConnection` is a `DisplayConnection` implementation
+that does absolutely nothing, which is used when a connection to a
+marquee cannot be found. It allows application code to send messages
+to a marquee when no physical connection exists.
