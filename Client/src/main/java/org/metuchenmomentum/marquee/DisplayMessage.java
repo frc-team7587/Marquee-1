@@ -42,20 +42,33 @@ import java.nio.charset.StandardCharsets;
  * @see DisplayCommand
  */
 public final class DisplayMessage {
-   private String displayText;
-   private DisplayCommand displayCommand;
-   private int foregroundBlue;
-   private int foregroundGreen;
-   private int foregroundRed;
-   private int backgroundBlue;
-   private int backgroundGreen;
-   private int backgroundRed;
-   private int delay1;
-   private int delay2;
+
+    private static String ERROR_STRING = 
+        new DisplayMessage()
+        .setDisplayCommand(DisplayCommand.ERROR)
+        .toString();
+
+    private String displayText;
+    private DisplayCommand displayCommand;
+    private int foregroundBlue;
+    private int foregroundGreen;
+    private int foregroundRed;
+    private int backgroundBlue;
+    private int backgroundGreen;
+    private int backgroundRed;
+    private int delay1;
+    private int delay2;
+    private State state;
+
+    private enum State {
+        VALID,
+        INVALID,
+    }
   
-   private static int checkColor(int value, String setting) {
+   private int checkColor(int value, String setting) {
     if (value < 0 || value > 255) {
-        throw new IllegalArgumentException(
+        state = State.INVALID;
+        System.out.println(
             new StringBuilder(
                 "Color values must be between 0 and 255 but the value for ")
                 .append(setting)
@@ -78,6 +91,8 @@ public final class DisplayMessage {
     backgroundRed = 0;
     delay1 = 0;
     delay2 = 0;
+
+    state = State.VALID;
    }
  
    public DisplayMessage setText(String text) {
@@ -122,10 +137,11 @@ public final class DisplayMessage {
 
    public DisplayMessage setDelay1(int delay) {
     if (delay < 0) {
-        throw new IllegalArgumentException(
+        System.out.println(
             "Delays must be non-negative but delay 1 is " 
             + delay
             + '.');
+    state = State.INVALID;
     }
     delay1 = delay;
     return this;
@@ -133,7 +149,8 @@ public final class DisplayMessage {
 
    public DisplayMessage setDelay2(int delay) {
     if (delay < 0) {
-        throw new IllegalArgumentException(
+        state = State.INVALID;
+        System.out.println(
             "Delays must be non-negative but delay 2 is " 
             + delay
             + '.');
@@ -144,34 +161,39 @@ public final class DisplayMessage {
 
    @Override
    public String toString() {
-    String result = new StringBuilder(
-        displayText.isEmpty() ? " " : displayText)
-    .append('|')
-    .append(displayCommand.ordinal())
-    .append('|')
-    .append(delay1)
-    .append('|')
-    .append(delay2)
-    .append('|')
-    .append(foregroundRed)
-    .append('|')
-    .append(foregroundGreen)
-    .append('|')
-    .append(foregroundBlue)
-    .append('|')
-    .append(backgroundRed)
-    .append('|')
-    .append(backgroundGreen)
-    .append('|')
-    .append(backgroundBlue)
-    .append('\n')
-    .toString();
+    String result = null;
+    switch (state) {
+        case VALID:
+            result = new StringBuilder(
+                displayText.isEmpty() ? " " : displayText)
+                .append('|')
+                .append(displayCommand.ordinal())
+                .append('|')
+                .append(delay1)
+                .append('|')
+                .append(delay2)
+                .append('|')
+                .append(foregroundRed)
+                .append('|')
+                .append(foregroundGreen)
+                .append('|')
+                .append(foregroundBlue)
+                .append('|')
+                .append(backgroundRed)
+                .append('|')
+                .append(backgroundGreen)
+                .append('|')
+                .append(backgroundBlue)
+                .append('\n')
+                .toString();
 
-    if (result.length() > 128) {
-        throw new IllegalStateException(
-            "Command string longer than 128 characters: "
-            + result
-        );
+            if (result.length() > 128) {
+                result = ERROR_STRING;
+            }
+            break;
+        case INVALID:
+            result = ERROR_STRING;
+            break;
     }
     return result;
    }
