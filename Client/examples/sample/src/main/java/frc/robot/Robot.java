@@ -5,14 +5,11 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.DigitalOutput;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import org.metuchenmomentum.marquee.DisplayCommand;
-import org.metuchenmomentum.marquee.DisplayMessage;
-import org.metuchenmomentum.marquee.SpiDisplayConnection;
+import org.metuchenmomentum.marquee.DisplayConnectionFactory;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -23,14 +20,14 @@ import org.metuchenmomentum.marquee.SpiDisplayConnection;
 public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
-  private static final String moNo = "7587";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  private SpiDisplayConnection spi0DisplayConnection;
-  private SPI spi1;
+  private DisplayDriver displayDriver;
   private DigitalOutput digOut0;
-  private int callCount;
-  private int cycleCount;
+
+  public Robot() {
+    displayDriver = null;
+  }
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -41,27 +38,13 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto); 
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
-    spi0DisplayConnection = new SpiDisplayConnection(SPI.Port.kOnboardCS0);
 
-    // Fill the display with blue.
-    DisplayMessage setBlue = new DisplayMessage()
-      .setForegroundBlue(127)
-      .setDisplayCommand(DisplayCommand.FILL_WITH_COLOR);
-    int bytesSent = spi0DisplayConnection.send(setBlue);
-    System.out.println("Message sent to display, length = " + bytesSent + " bytes");
-    spi1 = new SPI(SPI.Port.kOnboardCS1);
-    spi1.setMode(SPI.Mode.kMode0);
-    spi1.setClockRate(100000);
-    System.out.println("Second SPI output configured.");
-    // bytesSent = spi1.write(dummyMessage, dummyMessage.length);
-    // System.out.println("" + bytesSent + " bytes written to SPI1");
     digOut0 = new DigitalOutput(0);
     digOut0.setPWMRate(1000);
     digOut0.enablePWM(0.5);
-    System.out.println("Digital Output 0 configured for PWM at 100000 kHz.");
-    callCount = 0;
-    callCount = 0;
-    cycleCount = 0;
+
+    displayDriver = new DisplayDriver(DisplayConnectionFactory.usbConnection());
+    
     System.out.println("Robot initialized.");
   }
 
@@ -74,42 +57,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-    callCount %= 300;
-    if (callCount == 0) {
-      switch (cycleCount) {
-        case 0:
-          blueTeamNumber();
-          break;
-        case 1:
-          redTeamNumber();
-          break;
-        case 2:
-        default:
-          errorPattern();
-          break;
-        case 3:
-          singlePixelNaturalOrder();
-          break;
-        case 4:
-          singlePixelLeftToRight();
-          break;
-        case 5:
-          fillWithGreen();
-          break;
-        case 6:
-          scrollText();
-          break;
-        case 7:
-          smoothTextCrawl();
-          break;
-        case 8:
-          rainbowPattern();
-          break;
-      }
-
-      cycleCount = (++cycleCount) % 9;
+    if (displayDriver != null) {
+      displayDriver.robotPeriodic();
     }
-    ++callCount;
   }
 
   /**
@@ -174,94 +124,5 @@ public class Robot extends TimedRobot {
   /** This function is called periodically whilst in simulation. */
   @Override
   public void simulationPeriodic() {}
-
-  private void blueTeamNumber() {
-        // Fill the display with blue.
-        DisplayMessage setBlue = new DisplayMessage()
-        .setText(moNo)
-        .setForegroundBlue(127)
-        .setDisplayCommand(DisplayCommand.STATIC_TEXT);
-      int bytesSent = spi0DisplayConnection.send(setBlue);
-      System.out.println(
-        "Blue team number command >>>" + setBlue.toString() + "<<<");
-      System.out.println(
-        "Blue team number message sent to display, length = " + bytesSent + " bytes");
-  }
-  private void redTeamNumber() {
-    // Fill the display with blue.
-    DisplayMessage setBlue = new DisplayMessage()
-      .setText(moNo)
-      .setForegroundRed(127)
-      .setDisplayCommand(DisplayCommand.STATIC_TEXT);
-    int bytesSent = spi0DisplayConnection.send(setBlue);
-    System.out.println(
-      "Red team number message sent to display, length = " + bytesSent + " bytes");
-  }
-
-  private void fillWithGreen() {
-    DisplayMessage greenFill = new DisplayMessage()
-        .setForegroundGreen(63)
-        .setDisplayCommand(DisplayCommand.FILL_WITH_COLOR);
-    int bytesSent = spi0DisplayConnection.send(greenFill);
-    System.out.println(
-      "Green fill pattern command sent to display, length = " + bytesSent);
-  }
-  private void errorPattern() {
-    DisplayMessage displayError = new DisplayMessage()
-        .setDisplayCommand(DisplayCommand.ERROR)
-        .setDelay1(100);
-    int bytesSent = spi0DisplayConnection.send(displayError);
-    System.out.println(
-      "Display error pattern command set to display, length = " + bytesSent);
-  }
-
-  private void rainbowPattern() {
-    DisplayMessage displayRainbow = new DisplayMessage()
-        .setDisplayCommand(DisplayCommand.RIPPLING_RAINBOW)
-        .setDelay1(100);
-    spi0DisplayConnection.send(displayRainbow);
-}
-
-  private void scrollText() {
-    DisplayMessage textCrawl = new DisplayMessage()
-        .setText("Text crawl ...")
-        .setDisplayCommand(DisplayCommand.SCROLLING_TEXT)
-        .setForegroundGreen(32)
-        .setForegroundBlue(32)
-        .setDelay1(50)
-        .setDelay2(50);
-    int bytesSent = spi0DisplayConnection.send(textCrawl);
-    System.out.println(
-      "Text crawl command sent to display, length = " + bytesSent);
-  }
-
-  private void singlePixelNaturalOrder() {
-    DisplayMessage naturalOrder = new DisplayMessage()
-        .setDisplayCommand(DisplayCommand.SINGLE_PIXEL_NATURAL_ORDER)
-        .setForegroundRed(32)
-        .setForegroundGreen(32)
-        .setDelay1(50);
-    spi0DisplayConnection.send(naturalOrder);
-  }
-
-  private void singlePixelLeftToRight() {
-    DisplayMessage leftToRight = new DisplayMessage()
-        .setDisplayCommand(DisplayCommand.SINGLE_PIXEL_LEFT_TO_RIGHT)
-        .setForegroundRed(32)
-        .setForegroundBlue(32)
-        .setDelay1(50);
-    spi0DisplayConnection.send(leftToRight);
-  }
-
-  private void smoothTextCrawl() {
-    DisplayMessage smoothCrawl = new DisplayMessage()
-        .setDisplayCommand(DisplayCommand.TEXT_CRAWL)
-        .setText("---Smooth---")
-        .setForegroundRed(64)
-        .setForegroundGreen(32)
-        .setForegroundBlue(64)
-        .setDelay1(40);
-    spi0DisplayConnection.send(smoothCrawl);
-  }
 }
 
