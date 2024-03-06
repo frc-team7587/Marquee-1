@@ -21,11 +21,18 @@ public class UsbDisplayConnection implements DisplayConnection {
      * 
      * @param message message to send
      * 
-     * @return the number of bytes sent. Should be 128..
+     * @return the number of bytes sent, which should be in the range
+     *   [0 .. 127]
      */
     @Override
     public int send(DisplayMessage message) {
-        return serialPort.writeString(message.toString());
+        try {
+            return serialPort.writeString(message.toString());
+        } catch (Exception e) {
+            System.out.println(
+                "Exception while sending message to the Marquee.\n" + e);
+            return 0;
+        }
     }
 
     /**
