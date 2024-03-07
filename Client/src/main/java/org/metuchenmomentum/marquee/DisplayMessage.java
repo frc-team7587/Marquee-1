@@ -80,6 +80,11 @@ public final class DisplayMessage {
     return value;
   }
 
+  /**
+   * Constructs an instance that fills the panel with black, that is,
+   * turns the panel completely off. Users should invoke setters
+   * to configure the message.
+   */
    public DisplayMessage() {
     displayText = "";
     displayCommand = DisplayCommand.FILL_WITH_COLOR;
