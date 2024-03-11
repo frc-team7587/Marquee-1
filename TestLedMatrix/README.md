@@ -159,10 +159,28 @@ power to the board. Reversing polarity will ruin the chip.
 Note that we must connect all grounds together. This includes
 
 - ESP32 Groound
-- Power supply ground
+- Power supply ground (i.e. buck converter(s))
 - LED array ground
 
 The ESP32 has three ground pins: 14, 32, and 38. They are interchangeable.
+
+### Powering the ESP32
+
+As indicated above, the ESP32 can be powered three ways.
+
+1. Via its USB connection. Note that the RoboRio USB ports can
+   power the ESP32.
+2. Directly from a 3.3 Volt power source (i.e. buck converter)
+3. Directly from a 5 Volt power source, which **must** be connected to the
+   ESP32's 5 Volt pin.
+   
+:warning: if the ESP32 is powered by 5 Volts, **BE SURE** to connect power to
+its 5 Volt pin. Connecting 5 Volts to any other pin **will destroy the microcontroller**.
+
+The LED panel's red wire can power the ESP32. Just connect it to
+**the ESP32's 5 Volt pin**. This is the recommended configuration
+because it guarantees that the ESP32 is powered on **before** the
+RoboRio searches for it.
 
 ### Wiring the Display Panel
 
