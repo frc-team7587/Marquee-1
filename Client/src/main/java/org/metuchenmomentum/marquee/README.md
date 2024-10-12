@@ -90,6 +90,10 @@ empty string for text values, and allows the users to set:
   for the initial display, and delay 2 specifies the interval between
   crawl shifting.
 
+It is strongly recommended not to set any unsused field values
+so as to maximize backward compatility if currently unused
+values are brought into service.
+
 Color intensities vary from 0 (completely off) to 255 (full power)
 and default to 0. Delays are in ESP32 ticks, where one tick is one
 millisecond, and default to 0.
@@ -144,9 +148,6 @@ The `VacuousDisplayConnection` is a `DisplayConnection` implementation
 that does absolutely nothing, which is used when a connection to a
 marquee cannot be found. It allows application code to send messages
 to a marquee when no physical connection exists.
-
-It is strongly recommended that you not set an unsused field value
-so as to maximize bacward compatility.
 
 ## Commands
 
