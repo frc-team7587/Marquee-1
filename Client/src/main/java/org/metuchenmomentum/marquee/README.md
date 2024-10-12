@@ -134,7 +134,7 @@ paths of the form `/dev/ttyUSBn`, where `n` is 0, 1, or 2.
 ### `UsbSerialPortBuilder`
 
 The builds `SerialPort` instances that connect to
-USB serial devices which are file
+USB serial devices, which are file
 paths of the form `/dev/ttyUSBn`, where `n` is 0, 1, or 2. Note that
 the `SerialPort` class is provided by the WPI library. 
 
