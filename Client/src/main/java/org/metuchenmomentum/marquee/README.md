@@ -90,7 +90,7 @@ empty string for text values, and allows the users to set:
   for the initial display, and delay 2 specifies the interval between
   crawl shifting.
 
-It is strongly recommended not to set any unsused field values
+:warning: It is strongly recommended not to set any unsused field values
 so as to maximize backward compatility if currently unused
 values are brought into service.
 
