@@ -74,7 +74,7 @@ to the ESP32. It contains one function that sends a command.
 
 ### `DisplayMessage`
 
-The `DisplayMessage` class simplifies command generation. Pt provides
+The `DisplayMessage` class simplifies command generation. It provides
 convenient defaults for all fields, zero for numeric values and the
 empty string for text values, and allows the users to set:
 
