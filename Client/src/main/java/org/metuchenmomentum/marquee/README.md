@@ -118,7 +118,7 @@ implementation that sends messages over
 [SPI](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface).
 The channel is (i.e. slave select pin) is set at construction.
 
-###`UsbDisplayConnection`
+### `UsbDisplayConnection`
 
 The `UsbDisplayConnection` class is a 
 [`DisplayConnection`](#displayconnection) 
