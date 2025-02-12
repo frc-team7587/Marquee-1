@@ -10,81 +10,21 @@
 #include "FastLED.h"
 
 static const CRGB RIPPLE_TABLE[] = {
-  {
-    .red = 12,
-    .green = 0,
-    .blue = 48,
-  },
-  {
-    .red = 24,
-    .green = 0,
-    .blue = 36,
-  },
-  {
-    .red = 36,
-    .green = 0,
-    .blue = 24,
-  },
-  {
-    .red = 48,
-    .green = 0,
-    .blue = 12,
-  },
-  {
-    .red = 60,
-    .green = 0,
-    .blue = 0,
-  },
-  {
-    .red = 48,
-    .green = 12,
-    .blue = 0,
-  },
-  {
-    .red = 36,
-    .green = 24,
-    .blue = 0,
-  },
-  {
-    .red = 24,
-    .green = 36,
-    .blue = 0,
-  },
-  {
-    .red = 12,
-    .green = 48,
-    .blue = 0,
-  },
-  {
-    .red = 0,
-    .green = 60,
-    .blue = 0,
-  },
-  {
-    .red = 0,
-    .green = 48,
-    .blue = 12,
-  },
-  {
-    .red = 0,
-    .green = 36,
-    .blue = 24,
-  },
-  {
-    .red = 0,
-    .green = 24,
-    .blue = 36,
-  },
-  {
-    .red = 0,
-    .green = 12,
-    .blue = 48,
-  },
-  {
-    .red = 0,
-    .green = 0,
-    .blue = 60,
-  },
+    CRGB(12, 0, 48),
+    CRGB(24, 0, 36),
+    CRGB(36, 0, 24),
+    CRGB(48, 0, 12),
+    CRGB(60, 0, 0),
+    CRGB(48, 12, 0),
+    CRGB(36, 24, 0),
+    CRGB(24, 36, 0),
+    CRGB(12, 48, 0),
+    CRGB(0, 60, 0),
+    CRGB(0, 48, 12),
+    CRGB(0, 24, 36),
+    CRGB(0, 24, 36),
+    CRGB(0, 12, 48),
+    CRGB(0, 0, 60),
 };
 
 #define RIPPLE_TABLE_LENGTH (sizeof(RIPPLE_TABLE) / sizeof(RIPPLE_TABLE[0]))

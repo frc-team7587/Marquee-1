@@ -9,12 +9,6 @@
 #include "ColorTable.h"
 #include "FastLED.h"
 
-static const CRGB medium_white = {
-    .red = 63,
-    .green = 63,
-    .blue = 63,
-};
-
 static const CRGB black = CRGB::Black;
 
 static const unsigned char what_happened[] = {0x81, 0x81, 0x81, 0x81, 0x81};

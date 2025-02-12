@@ -22,11 +22,9 @@
 #include "DisplayManager.h"
 #include "DisplayTask.h"
 #include "FastLED.h"
-#include "I2CCommandHandler.h"
 #include "Marquee.h"
 #include "Panels.h"
 #include "SerialReadTask.h"
-#include "SPIReceiveTask.h"
 
 #include "PwmPinsAndChannels.h"
 
@@ -34,11 +32,6 @@
 #define HONORING_CONTRACTS_NOT 4
 
 #define NUM_LEDS (8 * 32)
-
-#define MAX_SPI_MESSAGE 128
-
-WORD_ALIGNED_ATTR DMA_ATTR uint8_t spi_receive_buffer[MAX_SPI_MESSAGE];
-WORD_ALIGNED_ATTR DMA_ATTR uint8_t spi_send_buffer[MAX_SPI_MESSAGE];
 
 static CRGB leds[NUM_LEDS];
 static 	const Panel* panel = Panels::alternatingEightByThirtyTwo();
@@ -49,12 +42,6 @@ static DisplayDrivers drivers;
 static DisplayManager display_manager(&drivers, &marquee);
 
 static CommandPublisher command_publisher;
-static I2CCommandHandler i2c_command_handler(&command_publisher);
-static SPIReceiveTask spi_receive_task(
-    &command_publisher,
-    MAX_SPI_MESSAGE,
-    spi_receive_buffer,
-    spi_send_buffer);
 static SerialReadTask read_task(&command_publisher);
 
 
@@ -108,14 +95,10 @@ void setup() {
   xTaskCreate(
     start_serial_task,
     "Serial communication manager",
-    1024,
+    4096,
     NULL,
     3,
     &h_serial_communication_manager);
-
-  spi_receive_task.start();
-
-  i2c_command_handler.begin();
 
   DisplayMessage left_to_right_message;
   left_to_right_message.p_text = NULL;

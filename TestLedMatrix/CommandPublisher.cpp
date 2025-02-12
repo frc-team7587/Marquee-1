@@ -10,6 +10,7 @@
 
 #include "CommandPublisher.h"
 #include <stdlib.h>
+#include <cstring>
 
 enum CharacterType {
   TEXT,     // Valid non-numeric character
@@ -257,7 +258,7 @@ static BaseType_t add_digit(BaseType_t value, unsigned char digit) {
 }
 
 void CommandPublisher::init() {
-  memset(&command_buffer, 0, sizeof(command_buffer));
+  memset(command_buffer, 0, sizeof(command_buffer));
   memset(&command_to_publish, 0, sizeof(command_to_publish));
 }
 
@@ -273,7 +274,7 @@ void CommandPublisher::begin(QueueHandle_t h_command_queue) {
   this->h_command_queue = h_command_queue;
 }
 
-void CommandPublisher::parse_and_publish(const unsigned char * raw_command) {
+void CommandPublisher::parse_and_publish(const unsigned char *raw_command) {
   init();
   STATE state = TEXT;
   int16_t number_of_characters = 0;
@@ -288,9 +289,10 @@ void CommandPublisher::parse_and_publish(const unsigned char * raw_command) {
   BaseType_t background_blue = 0;
   const unsigned char *text_to_publish = command_buffer;
   unsigned char incoming_byte = '\0';
+  const unsigned char *received_command = raw_command;
 
   while ((number_of_characters < MAX_TEXT_LENGTH - 1)
-      && (incoming_byte = *(raw_command++))
+      && (incoming_byte = *(received_command++))
       && (state != END_OF_COMMAND)
       && (state != END_OF_ERROR)) {
     CharacterType character_type = character_type_of((int) incoming_byte);
@@ -396,7 +398,9 @@ void CommandPublisher::parse_and_publish(const unsigned char * raw_command) {
         text_to_publish = INVALID_COMMAND;
         command_to_publish.text_length = 5;
         command_index = 0;
-        Serial.println("Bad command.");
+        break;
+
+      default:
         break;
     }
   }
@@ -413,7 +417,13 @@ void CommandPublisher::parse_and_publish(const unsigned char * raw_command) {
   command_to_publish.background.red = background_red;
   command_to_publish.background.green = background_green;
   command_to_publish.background.blue = background_blue;
-  xQueueSendToBack(h_command_queue, &command_to_publish, pdMS_TO_TICKS(25));
+  BaseType_t send_status = xQueueSendToBack(
+      h_command_queue, &command_to_publish, pdMS_TO_TICKS(25));
+//  if (send_status == pdTRUE) {
+//    Serial.printf("Successfully sent %s.\n", raw_command);
+//  } else {
+//    Serial.println("Queue full.");
+//  }
 }
 
 void CommandPublisher::publish_error() {

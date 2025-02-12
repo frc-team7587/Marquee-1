@@ -22,12 +22,13 @@ void DisplayManager::begin(
   memset(&command_indicator_message, 0, sizeof(command_indicator_message));
   for (;;) {
     if (xQueueReceive(h_queue, &message, portMAX_DELAY) == pdPASS) {
-      DisplayDriver *driver = drivers->of_type(message.command);
+      DisplayDriver *driver = DisplayDrivers::of_type(message.command);
       command_indicator_message.blink_count = message.command + 1;
       xQueueSendToBack(
           h_command_indicator_queue,
           &command_indicator_message,
           pdMS_TO_TICKS(1));
+      Serial.println("Sent driver indicator message.");
       BaseType_t status = driver->begin(message, marquee, h_queue);
       while (status != pdPASS) {
         status = driver->refresh(message, marquee, h_queue);

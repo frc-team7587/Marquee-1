@@ -21,6 +21,8 @@ const DisplayMessage& DisplayMessage::operator=(const DisplayMessage& rhs) {
   p_text = rhs.p_text;
   text_length = rhs.text_length;
   command = rhs.command;
+  delay1 = rhs.delay1;
+  delay2 = rhs.delay2;
   foreground = rhs.foreground;
   background = rhs.background;
   return *this;
