@@ -20,7 +20,6 @@
 
 class DisplayManager {
 
-  DisplayDrivers *drivers;
   DisplayMessage message;
   Marquee *marquee;
 
@@ -35,8 +34,7 @@ public:
    *                        marquee drive3rs to the display manager
    * marquee                The marquee that displays the text
    */
-  DisplayManager(DisplayDrivers *drivers, Marquee *marquee) :
-    drivers(drivers),
+  DisplayManager(Marquee *marquee) :
     marquee(marquee) {
   }
 

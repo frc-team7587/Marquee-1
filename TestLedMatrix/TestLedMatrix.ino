@@ -18,7 +18,6 @@
 #include "CommandIndicator.h"
 #include "CommandPublisher.h"
 #include "ColorTable.h"
-#include "DisplayDrivers.h"
 #include "DisplayManager.h"
 #include "DisplayTask.h"
 #include "FastLED.h"
@@ -38,8 +37,7 @@ static 	const Panel* panel = Panels::alternatingEightByThirtyTwo();
 
 static Marquee marquee(leds, NUM_LEDS, *panel);
 static CommandIndicator command_indicator;
-static DisplayDrivers drivers;
-static DisplayManager display_manager(&drivers, &marquee);
+static DisplayManager display_manager(&marquee);
 
 static CommandPublisher command_publisher;
 static SerialReadTask read_task(&command_publisher);
