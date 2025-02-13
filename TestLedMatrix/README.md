@@ -17,9 +17,12 @@ Developers need to be familiar with the foregoing.
 
 ## Development Environment
 
-The code base was written with the
-[Sloeber](https://eclipse.baeyens.it/) IDE, though any
-ESP32 IDE can be used. The development team selected Sloeber
+### IDE
+
+The code base was written with
+[Sloeber](https://eclipse.baeyens.it/) version 4.4.3 .
+
+Any ESP32 IDE can be used. The development team selected Sloeber
 because:
 
 1. The initial developer uses Eclipse, so was comfortable with
@@ -30,6 +33,18 @@ because:
 While the Arduino IDE would work in principle, it does not
 handle multiple source files well, so might not be the most
 convenient environment. That said, use whatever suits you.
+
+### Libraries
+
+The project requires the following libraries
+
+* ESP32 version 3.1.1. Note that this library includes `FreeRTOS`.
+* [FastLED version 3.9.13](https://github.com/FastLED/FastLED/releases).
+* [SPI version 3.1.1](https://docs.espressif.com/projects/arduino-esp32/en/latest/api/spi.html)
+* [Wire (i.e. I2C) version 3.3.1](https://docs.espressif.com/projects/arduino-esp32/en/latest/api/i2c.html)
+
+All were installed via Sloeber's 
+[Library Manager](https://duckduckgo.com/?q=sloeber+library+manager&t=newext&atb=v410-1&ia=web).
 
 ## Architecture
 
@@ -56,10 +71,61 @@ The system contains the following components
    used for inter-task communications, to send display directives from the
    Serial communications task to the display task.
 
-The serial and SPI communication tasks runs at relatively high priority so the
+Note that the the serial and SPI communication tasks are disabled in the
+current version. To enable them:
+
+1. Include their headers, `SPIReceiveTask.h` or `I2CCommandHandlere.h` into
+   `TestLedMatrix.ino`.
+2. Create static instances of the desired class(es).
+3. Start the task.
+
+See below for details.
+
+### I2C
+
+To create the task:
+```1
+i2c_receive_task(&command_publisher);
+```
+
+To start the task:
+
+```
+  i2c_command_handler.begin();
+```
+
+### SPI
+
+To create the task:
+
+```
+static SPIReceiveTask spi_receive_task(
+    &command_publisher,
+    MAX_SPI_MESSAGE,
+    spi_receive_buffer,
+    spi_send_buffer);
+```
+
+Initialize the SPI task pins before starting the task.
+
+```
+SPIReceiveTask::configure_gpio();
+```
+
+Note that `SPIReceiveTask::configure_gpio` is a static method.
+
+To start the task:
+
+```
+spi_receive_task.start();
+```
+
+### Receive Task Priorities
+
+Receive tasks run at relatively high priority so the
 system can respond to commands as quickly as possible. Even though the
 communication tasks run at high priority, they spends most of their
-time waiting for input, so they consume little CPI time. The display task,
+time waiting for input, so they consume little CPu time. The display task,
 which runs at lower priority, runs far more frequently and so consumes
 more CPU and other resources.
 
@@ -88,7 +154,7 @@ All display drivers:
 C++ enumerations have integer values which, unless otherwise specified,
 start from 0. This is the display command value that specifies the triver.
 
-**NOTE** When you add a value to the `DisplayCommand` enumeration,
+:arrow_right:**NOTE**: When you add a value to the `DisplayCommand` enumeration,
        make sure that `NUMBER_OF_COMMANDS` remains in **LAST** place.
        Failure to to so will cause undefined behavior.
 
@@ -110,12 +176,15 @@ for details.
 
 The breadboard system uses the following hardware:
 
-- An [ESP32 Development Board](https://www.amazon.com/gp/product/B09DPGMZR9/ref=ppx_yo_dt_b_asin_title_o06_s00)
-  These were selected on price and recommendation. There are other development
-  boards that would work equally well.
+- The [AITRIP ESP32 Development Board](https://www.amazon.com/gp/product/B09DPGMZR9/ref=ppx_yo_dt_b_asin_title_o06_s00)
+  These were selected on price and recommendation. Other ESP32-based development
+  boards could work equally well.
 - A [WW2812B](https://www.mouser.com/pdfDocs/WS2812B-2020_V10_EN_181106150240761.pdf)-based
   8 x 32 LED panel similar to [this](https://www.amazon.com/gp/product/B088BTXHRG/ref=ask_ql_qh_dp_hza).
-- A 5 volt power supply. Mine was salvalged from a server/
+- A 5 volt power supply. Mine was salvalged from a server. 
+  [This](https://www.amazon.com/dp/B01LXN7MN3?ref_=ppx_hzsearch_conn_dt_b_fed_asin_title_5) works well. If
+  you boy one, be sure to buy compatible sockets (see below)
+  as well. 
 - An [830 Point solderless breadboard](https://www.amazon.com/EL-CP-003-Breadboard-Solderless-Distribution-Connecting/dp/B01EV6LJ7G/ref=sr_1_27)
 
 We will need a [12 to 5 VDC Buck Converter](https://www.amazon.com/Regulator-Converter-12V-Waterproof-Transformer/dp/B08CHMJM9J/ref=sr_1_13)
@@ -126,11 +195,20 @@ My configuration is running without them, but that might be blind dumb luck.
 
 We must ruggedize the hardware before deployment.
 
+This 12 Volt
+[power supply](https://www.amazon.com/12V-ELEGOO-Pro-Power-Supply/dp/B0B8C2X2YH/ref=sr_1_1)
+can power the RoboRio for bench testing.
+
+The commercial power supplies mentioned above mate with a 5.1 x 2.1 mm socket like
+[this](https://www.amazon.com/5-5mm-Supply-Socket-Female-Connection/dp/B083W2YGXF/ref=sr_1_3?th=1)
+or
+[this](https://www.amazon.com/Ksmile%C2%AE-Female-2-1x5-5mm-Adapter-Connector/dp/B015OCV5Y8/ref=sr_1_24)
+
 ## Wiring the marquee
 
 ESP32 GPIO pins are assigned in `PwmPinsAndChannel.h`, which specifies that
 GPIO Pin 15 is connected to the LED array signal line. At the time of writing,
-this is the only pin that the software uses. 
+this is the only pin that the software uses.
 
 There are three wiring configurations:
 
@@ -139,10 +217,9 @@ There are three wiring configurations:
 3. 3.3 Volt power provided directly to the board.
 
 
-:warning: the Robot's 5V power supply does not provide usable power, and the
-RoboRio's USB port also cannot power the ESP32. The power wiring must conform
-to FIRST requirements, which might require us to install a separate 12 Volt to
-5 Volt converter to power the microcontroller.
+:warning: **WARNING** the VRM's 5V power supply does not provide usable power, and the
+RoboRio's USB port also cannot power the ESP32. We have successfully powered the ESP32
+from the LED panel.s 5V output line.
 
 :warning: **WARNING** Refer to the [pinout diagram](ESP32ModulePinout.jpg) for pin assignments.
 Check every connection twice before applying power. The pin numbers apply
@@ -210,9 +287,9 @@ Signal input wires are labeled and connected to the ESP32 as follows:
 | ----- | ----- | --------- | --------------------------------- |
 | Green | DIN   | GPIO 15   | LED configuration command stream. |
 | White | GND   | GND       | Signal ground                     |
-| Red   | 5V    | N/C       | Not connected.
+| Red   | 5V    | N/C       | ESP32 5V                          |
 
-**NOTE** The LED matrix control signals run at 800 KHz, a typical frequency for an AM radio station.
+:arrow_right:**NOTE** The LED matrix control signals run at 800 KHz, a typical frequency for an AM radio station.
 (WNYC AM broadcasts at 820 KHz.) Control signals must be hard wired to the three pin female LED matrix
 control socket. Be sure to solder all joints. Lever style connectors render the connection useless.
 
@@ -229,8 +306,8 @@ To power the ESP32 from a 5V supply, Wire the chip as follows
 
 | Pin Number | Pin Name | Connect To |
 | ---------- | -------- | ---------- |
-|         19 | Vin 5V   | 5 Volt Power |
-|         38 | GND      | Plugboard ground (blue row on the solderless breadboard power strip) |
+|         19 | Vin 5V   | 5 Volt Power (red power strip if using a solderless breadboard) |
+|         38 | GND      | Ground (blue power strip if using a solderless breadboard) |
 
 Note that the standard 5V power supply cannot power the ESP32. We must provide
 an independent power source.
@@ -274,11 +351,11 @@ Please see `SerialReadTask.h` for further details.
 The ESP32 supports three input types.
 
 1. Serial [USB](https://en.wikipedia.org/wiki/USB) terminal emulation
-2. [SPI](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface)
-3. [I2C](https://en.wikipedia.org/wiki/I%C2%B2C)
+2. [SPI](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface) if enabled (see above)
+3. [I2C](https://en.wikipedia.org/wiki/I%C2%B2C) if enabled (see above)
 
 
-Each has unique characteristics, including wiring, message format, and limitations.
+Each has unique characteristics, including wiring and limitations.
 While all three connections are supported, only one must be active at any given time.
 Multiple connections are not supported.
 
@@ -332,7 +409,7 @@ for details. Connect the RoboRio to the ESP32 as follows:
 | Master In, Slave Out | `CIPO`      | GPIOP 19 (MISO) |
 | Ground               | Ground      | Ground          |
 
-As always, do not connect RoboRio power to the ESP32.
+As always, **never** connect RoboRio power to the ESP32.
 
 ### I2C
 
@@ -350,9 +427,7 @@ interface. Connect the devices as follows:
 As always, do not connect RoboRio power to the ESP32.
 
 Like SPI, the I2C interface accepts fixed length 128 byte messages.
-Zero fill the message on the right, then set the last byte to
-0xFF, all ones. The input routine uses 0xFF to reestablish
-sinc when things go wrong.
+Zero fill the message on the right,
 
 Note that the ESP32 must be fitted with 4.7 KOhm pullup
 resistors on I2C SCL and I2C SDA. Since the RoboRio has

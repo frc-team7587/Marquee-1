@@ -37,6 +37,5 @@ void DisplayTask::run(QueueHandle_t h_queue) {
       status = driver->refresh(message, marquee, h_queue);
     }
     xQueueReceive(h_queue, &message, pdMS_TO_TICKS(10));
-    Serial.println("Display task received a message.");
   }
 }

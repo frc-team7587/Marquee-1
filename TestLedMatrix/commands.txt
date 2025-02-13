@@ -28,30 +28,30 @@
  |3|0|0|0|0|0|0|0|0
  
 // Single pixel left to right
- |4|0|0|0|0|0|0|0|0
+ |5|0|0|0|0|0|0|0|0
  
  // Team number in soft blue on a black background
-7587|5|0|0|63|0|0|0|0|0
+7587|6|0|0|63|0|0|0|0|0
 
 // "Team" in medium blue on soft white.
- Team|5|0|0|0|0|128|4|4|4
+ Team|6|0|0|0|0|128|4|4|4
 
 // Team number in medium blue on soft white.
- 7587|5|0|0|0|0|128|4|4|4
+ 7587|6|0|0|0|0|128|4|4|4
  
-GO MO|5|0|0|0|0|192|4|4|4
+GO MO|6|0|0|0|0|192|4|4|4
 
-GO MO|5|0|0|0|0|192|8|5|0
+GO MO|6|0|0|0|0|192|8|5|0
 
-GO MO|5|0|0|0|96|96|32|0|0
+GO MO|6|0|0|0|96|96|32|0|0
 
-GO MO|5|0|0|0|0|0|0|0|128
+GO MO|6|0|0|0|0|0|0|0|128
 
 // Scrolling "Metuchen Momentum" in medium blue on a black background with
 // default delay values.
-Metuchen Momentum|6|0|0|0|0|127|0|0|0
+Metuchen Momentum|8|0|0|0|0|127|0|0|0
 
-// Scrolling "Thank you, Robbinsville Robotics" in medium yellow with two second
-// initial delay and 250 millisecond inter-frame delay.
-Thank you, Robbinsville Robitics|6|2000|250|63|63|0|0|0|0
+// Scrolling "Thank you, Robbinsville Robotics" in medium yellow with 100
+// millisecond initial and inter-frame delays.
+Thank you, Robbinsville Robitics|8|100|100|63|63|0|0|0|0
 
