@@ -90,14 +90,6 @@ void setup() {
     2,
     &h_display_manager);
 
-  xTaskCreate(
-    start_serial_task,
-    "Serial communication manager",
-    4096,
-    NULL,
-    3,
-    &h_serial_communication_manager);
-
   DisplayMessage left_to_right_message;
   left_to_right_message.p_text = NULL;
   left_to_right_message.text_length = 0;
@@ -108,6 +100,16 @@ void setup() {
   left_to_right_message.background = CRGB::Black;
   xQueueSendToBack(
     h_command_queue, &left_to_right_message, pdMS_TO_TICKS(1));
+  vTaskDelay(pdMS_TO_TICKS(1000));
+
+  xTaskCreate(
+    start_serial_task,
+    "Serial communication manager",
+    4096,
+    NULL,
+    3,
+    &h_serial_communication_manager);
+
 
   digitalWrite(HONORING_CONTRACTS_NOT, LOW);
   Serial.println("Initialization complete, honoring all contracts.");
