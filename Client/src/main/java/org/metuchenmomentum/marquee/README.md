@@ -101,11 +101,11 @@ empty string for text values, and allows the users to set:
   for the initial display, and delay 2 specifies the interval between
   crawl shifting.
 
-arrow_right:**NOTE**:  It is strongly recommended not to set any unsused field values
+:arrow_right: **NOTE**:  It is strongly recommended not to set any unsused field values
 so as to maximize backward compatility if future releases put them
 into service.
 
-arrow_right:**NOTE**: Commands are sequences of printable
+:arrow_right: **NOTE**: Commands are sequences of printable
 [US ASCII](https://www.ascii-code.com/) characters. Each
 character occupies one
 [`byte`](https://docs.oracle.com/javase/tutorial/java/nutsandbolts/datatypes.html)
@@ -138,7 +138,7 @@ implementation that sends messages over
 [SPI](https://en.wikipedia.org/wiki/Serial_Peripheral_Interface).
 The channel is (i.e. slave select pin) is set at construction.
 
-arrow_right:**NOTE**: Consider using a USB connection if a gyroscope
+:arrow_right: **NOTE**: Consider using a USB connection if a gyroscope
 is connected to the RoboRio via SPI. Gyroscopes generate heavy traffic.
 
 ### `UsbDisplayConnection`
@@ -249,7 +249,7 @@ Displays a simple test pattern, a single pixel that zigzags through
 the display. It was originally written to determine pixel addressing.
 Retaining it was simpler than removing it, so in it stayed.
 
-arrow_right:**NOTE**:  Contrary to its appearance, the display is not a true array.
+:arrow_right: **NOTE**:  Contrary to its appearance, the display is not a true array.
 Rather, it is a line of LEDs that has been folded zigzag fashion
 so it looks like an aray. At the very lowest level, pixels are
 addressed linearly, indexed from 0 to 255.
