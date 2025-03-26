@@ -16,6 +16,14 @@
 #include "DisplayCommand.h"
 #include "DisplayMessage.h"
 
+static void wait_for_robo_rio(void) {
+  while (!Serial.available()) {
+	  Serial.flush();
+	  vTaskDelay(pdMS_TO_TICKS(5));
+	}
+  while ('\n' != Serial.read()) {}
+}
+
 SerialReadTask::SerialReadTask(CommandPublisher *command_publisher) :
   command_publisher(command_publisher) {
   memset(input_buffer, 0, sizeof(input_buffer));
@@ -26,6 +34,7 @@ SerialReadTask::~SerialReadTask() {
 
 void SerialReadTask::run() {
   Serial.println("Serial read task started.");
+  wait_for_robo_rio();
   SerialReadStatus status = READING;
   memset(input_buffer, 0, sizeof(input_buffer));
   int characters_read = 0;
