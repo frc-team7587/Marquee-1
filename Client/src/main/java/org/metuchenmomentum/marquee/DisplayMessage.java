@@ -6,9 +6,9 @@ import java.nio.charset.StandardCharsets;
  * A message to send to the display controller. The message is an
  * array of bytes containing a pipe-delimited command string having
  * the following fields:
- * 
+ *
  * <pre>
- * 
+ *
  * | Field No. | Contents                                           |
  * | --------- | -------------------------------------------------- |
  * |         0 | The text to display, if any                        |
@@ -21,29 +21,29 @@ import java.nio.charset.StandardCharsets;
  * |         8 | Background red intensity                           |
  * |         9 | Background green intesity                          |
  * |        10 | Background blue intensity                          |
- * 
+ *
  * </pre>
- * 
+ *
  * Commands MUST end with a new-line (\n'). For Windows
  * compatibility, a carriage return ('\r') MAY appear before
  * the terminating new-line.
- * 
+ *
  * Display commands are specified by the DisplayCommand enum defined
  * in DisplayCommand.java.
- * 
+ *
  * Intensity values must be non-negative and less than or equal to
  * 255.
- * 
+ *
  * Delays must be non-negative.
- * 
+ *
  * Note that delay semantics vary among commands, and may be ignored
  * entirely.
- * 
+ *
  * @see DisplayCommand
  */
 public final class DisplayMessage {
 
-    private static String ERROR_STRING = 
+    private static String ERROR_STRING =
         new DisplayMessage()
         .setDisplayCommand(DisplayCommand.ERROR)
         .toString();
@@ -64,7 +64,7 @@ public final class DisplayMessage {
         VALID,
         INVALID,
     }
-  
+
    private int checkColor(int value, String setting) {
     if (value < 0 || value > 255) {
         state = State.INVALID;
@@ -79,6 +79,13 @@ public final class DisplayMessage {
     }
     return value;
   }
+
+  private void checkRGBColor(
+    RGBColor color) {
+      checkColor(color.red(), "RGB Red");
+      checkColor(color.green(), "RGB green");
+      checkColor(color.blue(), "RGB Blue");
+    }
 
   /**
    * Constructs an instance that fills the panel with black, that is,
@@ -99,7 +106,7 @@ public final class DisplayMessage {
 
     state = State.VALID;
    }
- 
+
    public DisplayMessage setText(String text) {
     displayText = text;
     return this;
@@ -109,6 +116,14 @@ public final class DisplayMessage {
     displayCommand = command;
     return this;
    }
+
+  public DisplayMessage setForeground(RGBColor color) {
+    checkRGBColor(color);
+    foregroundRed = color.red();
+    foregroundGreen = color.green();
+    foregroundBlue = color.blue()
+    return this;
+  }
 
    public DisplayMessage setForegroundBlue(int value) {
     foregroundBlue = checkColor(value, "foreground blue");
@@ -122,6 +137,14 @@ public final class DisplayMessage {
 
    public DisplayMessage setForegroundRed(int value) {
     foregroundRed = checkColor(value, "foreground red");
+    return this;
+   }
+
+   public DisplayMessage setBackground(RGBColor color) {
+    checkRGBColor(color);
+    backgroundRed = color.red();
+    backgroundGreen = color.green();
+    backgroundBlue = color.blue());
     return this;
    }
 
@@ -143,7 +166,7 @@ public final class DisplayMessage {
    public DisplayMessage setDelay1(int delay) {
     if (delay < 0) {
         System.out.println(
-            "Delays must be non-negative but delay 1 is " 
+            "Delays must be non-negative but delay 1 is "
             + delay
             + '.');
     state = State.INVALID;
@@ -156,7 +179,7 @@ public final class DisplayMessage {
     if (delay < 0) {
         state = State.INVALID;
         System.out.println(
-            "Delays must be non-negative but delay 2 is " 
+            "Delays must be non-negative but delay 2 is "
             + delay
             + '.');
     }
@@ -205,7 +228,7 @@ public final class DisplayMessage {
 
    public byte[] toByteArray() {
     byte[] result = new byte[128];
-    byte[] serializedCommand = 
+    byte[] serializedCommand =
         toString().getBytes(StandardCharsets.US_ASCII);
     System.arraycopy(
         serializedCommand,
